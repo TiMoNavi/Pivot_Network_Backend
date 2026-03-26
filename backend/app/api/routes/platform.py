@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
@@ -31,19 +31,21 @@ from app.schemas.platform import (
 )
 from app.services.activity import log_activity
 from app.services.auth import issue_node_registration_token
+from app.services.image_offer_publishing import run_offer_probe_and_pricing
+from app.services.pricing_engine import PricingEngineError
 from app.services.runtime_bootstrap import (
     RuntimeBootstrapError,
     build_codex_runtime_bootstrap,
     build_wireguard_bootstrap,
 )
-from app.services.wireguard_server import WireGuardServerError, apply_server_peer
 from app.services.swarm_manager import SwarmManagerError, get_manager_overview, get_worker_join_token
+from app.services.wireguard_server import WireGuardServerError, apply_server_peer
 
 router = APIRouter(prefix="/platform")
 
 
 def utcnow() -> datetime:
-    return datetime.utcnow()
+    return datetime.now(timezone.utc)
 
 
 def _serialize_node(node: Node) -> NodeResponse:
@@ -304,6 +306,26 @@ def report_uploaded_image(
     )
     db.commit()
     db.refresh(image)
+
+    try:
+        run_offer_probe_and_pricing(
+            db,
+            seller_user_id=node_token.user_id,
+            image=image,
+            node=node,
+            timeout_seconds=settings.PRICING_PROBE_TIMEOUT_SECONDS,
+        )
+    except SwarmManagerError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=f"Image reported, but auto-publish failed during remote probe: {exc}",
+        ) from exc
+    except PricingEngineError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=f"Image reported, but auto-publish failed during pricing: {exc}",
+        ) from exc
+
     return _serialize_image(image)
 
 

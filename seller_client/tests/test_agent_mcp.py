@@ -16,6 +16,9 @@ from seller_client.agent_mcp import (
     get_client_config,
     ping,
     prepare_wireguard_profile,
+    push_image,
+    push_image_to_server,
+    report_image_to_platform,
 )
 
 
@@ -250,3 +253,149 @@ def test_connect_server_vpn_uses_elevated_helper_on_access_denied(tmp_path: Path
 
     assert response["ok"] is True
     assert response["mode"] == "elevated_helper"
+
+
+def test_push_image_retries_transient_registry_errors(monkeypatch) -> None:
+    attempts = iter(
+        [
+            {
+                "command": ["docker", "push", "registry.example.com/demo:v1"],
+                "cwd": None,
+                "returncode": 1,
+                "stdout": "",
+                "stderr": "Patch \"https://registry.example.com/v2/demo/blobs/uploads/123\": EOF",
+                "ok": False,
+            },
+            {
+                "command": ["docker", "push", "registry.example.com/demo:v1"],
+                "cwd": None,
+                "returncode": 0,
+                "stdout": "digest: sha256:test size: 1234",
+                "stderr": "",
+                "ok": True,
+            },
+        ]
+    )
+
+    monkeypatch.setattr("seller_client.agent_mcp._docker_available", lambda: True)
+    monkeypatch.setattr("seller_client.agent_mcp._run_command", lambda command, cwd=None: next(attempts))
+    monkeypatch.setattr("seller_client.agent_mcp.time.sleep", lambda seconds: None)
+
+    response = push_image("registry.example.com/demo:v1")
+
+    assert response["ok"] is True
+    assert response["attempt"] == 2
+    assert len(response["attempts"]) == 2
+
+
+def test_push_image_to_server_persists_last_pushed_image_after_retry(tmp_path: Path, monkeypatch) -> None:
+    configure_environment(state_dir=str(tmp_path), registry="registry.example.com:5000")
+
+    monkeypatch.setattr("seller_client.agent_mcp._docker_available", lambda: True)
+    monkeypatch.setattr(
+        "seller_client.agent_mcp._run_command",
+        lambda command, cwd=None: {
+            "command": command,
+            "cwd": cwd,
+            "returncode": 0,
+            "stdout": "",
+            "stderr": "",
+            "ok": True,
+        }
+        if command[:2] == ["docker", "tag"]
+        else None,
+    )
+    monkeypatch.setattr(
+        "seller_client.agent_mcp.push_image",
+        lambda tag, retries=2, retry_delay_seconds=2.0: {
+            "command": ["docker", "push", tag],
+            "cwd": None,
+            "returncode": 0,
+            "stdout": "digest: sha256:test size: 1234",
+            "stderr": "",
+            "ok": True,
+            "attempt": 2,
+            "attempts": [
+                {
+                    "command": ["docker", "push", tag],
+                    "cwd": None,
+                    "returncode": 1,
+                    "stdout": "",
+                    "stderr": "Patch \"https://registry.example.com:5000/v2/demo/blobs/uploads/123\": EOF",
+                    "ok": False,
+                    "attempt": 1,
+                },
+                {
+                    "command": ["docker", "push", tag],
+                    "cwd": None,
+                    "returncode": 0,
+                    "stdout": "digest: sha256:test size: 1234",
+                    "stderr": "",
+                    "ok": True,
+                    "attempt": 2,
+                },
+            ],
+        },
+    )
+
+    response = push_image_to_server(
+        local_tag="python:3.12-alpine",
+        repository="seller/demo",
+        remote_tag="v1",
+        registry="registry.example.com:5000",
+        state_dir=str(tmp_path),
+    )
+
+    assert response["ok"] is True
+    updated = get_client_config(mask_secrets=False, state_dir=str(tmp_path))["data"]
+    assert updated["docker"]["last_pushed_image"] == "registry.example.com:5000/seller/demo:v1"
+
+
+def test_report_image_to_platform_uses_extended_timeout(tmp_path: Path, monkeypatch) -> None:
+    configure_environment(state_dir=str(tmp_path), backend_url="http://127.0.0.1:8000")
+    config = get_client_config(mask_secrets=False, state_dir=str(tmp_path))["data"]
+    config["auth"]["node_registration_token"] = "node-token"
+    config["auth"]["device_fingerprint"] = "device-001"
+    _config_path(tmp_path).write_text(json.dumps(config, indent=2) + "\n", encoding="utf-8")
+
+    captured: dict[str, object] = {}
+
+    def fake_run_backend_request(method, path, **kwargs):
+        captured["method"] = method
+        captured["path"] = path
+        captured["timeout_seconds"] = kwargs["timeout_seconds"]
+        return {
+            "ok": True,
+            "body": json.dumps(
+                {
+                    "id": 1,
+                    "seller_user_id": 1,
+                    "node_id": 1,
+                    "repository": "seller/demo",
+                    "tag": "v1",
+                    "digest": "sha256:test",
+                    "registry": "registry.example.com:5000",
+                    "source_image": "python:3.12-alpine",
+                    "status": "uploaded",
+                    "push_ready": True,
+                    "created_at": "2026-03-27T00:00:00Z",
+                    "updated_at": "2026-03-27T00:00:00Z",
+                }
+            ),
+        }
+
+    monkeypatch.setattr("seller_client.agent_mcp._run_backend_request", fake_run_backend_request)
+
+    response = report_image_to_platform(
+        repository="seller/demo",
+        tag="v1",
+        registry="registry.example.com:5000",
+        digest="sha256:test",
+        source_image="python:3.12-alpine",
+        state_dir=str(tmp_path),
+    )
+
+    assert response["ok"] is True
+    assert captured["method"] == "POST"
+    assert captured["path"] == "/api/v1/platform/images/report"
+    assert captured["timeout_seconds"] == 240

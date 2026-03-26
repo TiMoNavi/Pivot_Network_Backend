@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import secrets
-from datetime import datetime
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
@@ -18,7 +18,7 @@ router = APIRouter(prefix="/buyer")
 
 
 def utcnow() -> datetime:
-    return datetime.utcnow()
+    return datetime.now(timezone.utc)
 
 
 def _serialize_order(order: BuyerOrder, offer: ImageOffer | None, node: Node | None) -> BuyerOrderResponse:

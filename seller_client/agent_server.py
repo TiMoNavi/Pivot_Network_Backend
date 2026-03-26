@@ -514,16 +514,16 @@ def _push_image_stages(result: dict[str, Any], repository: str, remote_tag: str)
         stages.append(
             _stage_from_result(
                 "report_image",
-                "向平台登记镜像元数据",
+                "向平台登记并自动上架镜像",
                 report_result,
-                f"平台已记录镜像 {repository}:{remote_tag}。",
+                f"平台已记录镜像 {repository}:{remote_tag}，并继续自动发布 buyer 可见商品。",
             )
         )
 
     if result.get("stage") == "push" and not stages:
         stages.append(_stage("push_image", "推送镜像到 Registry", "error", "镜像推送未完成。"))
     if result.get("stage") == "report" and not report_result:
-        stages.append(_stage("report_image", "向平台登记镜像元数据", "error", "镜像元数据登记未完成。"))
+        stages.append(_stage("report_image", "向平台登记并自动上架镜像", "error", "镜像登记或自动上架未完成。"))
     return stages
 
 
@@ -940,11 +940,11 @@ def run_push_image(payload: PushImageRequest) -> JSONResponse:
     response = _operation_payload(
         state_dir=state_dir,
         action="push_image",
-        title="镜像推送与登记",
+        title="镜像推送与上架",
         stages=_push_image_stages(result, payload.repository, payload.remote_tag),
         result=result,
-        success_summary="镜像已经推送到 Registry，并同步登记到平台。",
-        failure_summary="镜像推送或平台登记失败，需要先看失败阶段。",
+        success_summary="镜像已经推送到 Registry，并由平台后端自动发布为 buyer 可见商品。",
+        failure_summary="镜像推送或平台自动上架失败，需要先看失败阶段。",
     )
     return JSONResponse(response)
 

@@ -248,6 +248,58 @@ def test_buyer_refresh_session_reads_backend(monkeypatch) -> None:
     assert "42" in payload["session"]["logs"]
 
 
+def test_buyer_refresh_session_preserves_local_exec_history(monkeypatch) -> None:
+    monkeypatch.setattr(
+        agent_server,
+        "SESSION_STORE",
+        {
+            "local-1": {
+                "local_id": "local-1",
+                "backend_url": "http://127.0.0.1:8011",
+                "buyer_email": "buyer@example.com",
+                "buyer_token": "buyer-token",
+                "session_id": 3,
+                "seller_node_key": "node-001",
+                "runtime_image": "python:3.12-alpine",
+                "code_filename": "__shell__",
+                "session_mode": "shell",
+                "status": "running",
+                "logs": "$ python -V\nPython 3.12.0",
+                "remote_logs": "",
+                "local_exec_history": "$ python -V\nPython 3.12.0",
+                "relay_endpoint": "relay://buyer-runtime-session/3",
+                "connect_code": "abc123",
+                "created_at": "2026-03-25T00:00:00Z",
+                "ended_at": None,
+            }
+        },
+    )
+    monkeypatch.setattr(
+        agent_server,
+        "read_runtime_session",
+        lambda **kwargs: {
+            "session_id": 3,
+            "seller_node_key": "node-001",
+            "runtime_image": "python:3.12-alpine",
+            "code_filename": "__shell__",
+            "session_mode": "shell",
+            "status": "running",
+            "service_name": "buyer-runtime-test",
+            "relay_endpoint": "relay://buyer-runtime-session/3",
+            "logs": "",
+            "ended_at": None,
+        },
+    )
+
+    client = TestClient(agent_server.app)
+    response = client.get("/api/runtime/sessions/local-1")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["session"]["status"] == "running"
+    assert "Python 3.12.0" in payload["session"]["logs"]
+
+
 def test_buyer_exec_session_runs_local_command(monkeypatch) -> None:
     monkeypatch.setattr(
         agent_server,

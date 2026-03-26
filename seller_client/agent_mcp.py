@@ -173,6 +173,22 @@ def _docker_available() -> bool:
     return shutil.which("docker") is not None
 
 
+def _is_transient_registry_push_error(result: dict[str, Any]) -> bool:
+    if result.get("ok"):
+        return False
+    combined = f"{result.get('stdout')}\n{result.get('stderr')}".lower()
+    transient_markers = (
+        "eof",
+        "connection reset by peer",
+        "broken pipe",
+        "tls handshake timeout",
+        "context deadline exceeded",
+        "i/o timeout",
+        "unexpected http status: 5",
+    )
+    return any(marker in combined for marker in transient_markers)
+
+
 def _parse_json_lines(stdout: str) -> Any:
     lines = [line.strip() for line in stdout.splitlines() if line.strip()]
     if not lines:
@@ -206,10 +222,11 @@ def _run_registry_request(
     *,
     headers: dict[str, str] | None = None,
     data: bytes | None = None,
+    timeout_seconds: float = 20,
 ) -> dict[str, Any]:
     request = urllib.request.Request(url, method=method, headers=headers or {}, data=data)
     try:
-        with urllib.request.urlopen(request, timeout=20) as response:
+        with urllib.request.urlopen(request, timeout=timeout_seconds) as response:
             payload = response.read().decode("utf-8", "replace")
             return {
                 "ok": True,
@@ -238,6 +255,7 @@ def _run_backend_request(
     backend_url: str,
     bearer_token: str | None = None,
     payload: dict[str, Any] | None = None,
+    timeout_seconds: float = 20,
 ) -> dict[str, Any]:
     base_url = backend_url.rstrip("/")
     data: bytes | None = None
@@ -247,7 +265,13 @@ def _run_backend_request(
         headers["Content-Type"] = "application/json"
     if bearer_token:
         headers["Authorization"] = f"Bearer {bearer_token}"
-    return _run_registry_request(method, f"{base_url}{path}", headers=headers, data=data)
+    return _run_registry_request(
+        method,
+        f"{base_url}{path}",
+        headers=headers,
+        data=data,
+        timeout_seconds=timeout_seconds,
+    )
 
 
 def _registry_base_url(registry: str) -> str:
@@ -990,6 +1014,7 @@ def report_image_to_platform(
     status: str = "uploaded",
     backend_url: str | None = None,
     state_dir: str | None = None,
+    timeout_seconds: float = 240,
 ) -> dict[str, Any]:
     base_dir = Path(state_dir).expanduser().resolve() if state_dir else None
     config = _load_client_config(base_dir)
@@ -1011,6 +1036,7 @@ def report_image_to_platform(
             "source_image": source_image,
             "status": status,
         },
+        timeout_seconds=timeout_seconds,
     )
     if response["ok"]:
         response["data"] = json.loads(response["body"])
@@ -1559,10 +1585,23 @@ def tag_image_for_server(
 
 
 @mcp.tool(description="Push a tagged Docker image to the configured server registry.")
-def push_image(tag: str) -> dict[str, Any]:
+def push_image(tag: str, retries: int = 2, retry_delay_seconds: float = 2.0) -> dict[str, Any]:
     if not _docker_available():
         return {"ok": False, "error": "docker_cli_not_found"}
-    return _run_command(["docker", "push", tag])
+
+    attempts: list[dict[str, Any]] = []
+    total_attempts = max(1, retries + 1)
+    for attempt in range(1, total_attempts + 1):
+        result = _run_command(["docker", "push", tag])
+        result["attempt"] = attempt
+        attempts.append(result)
+        if result["ok"] or attempt == total_attempts or not _is_transient_registry_push_error(result):
+            if len(attempts) > 1:
+                result["attempts"] = attempts
+            return result
+        time.sleep(retry_delay_seconds * attempt)
+
+    return attempts[-1]
 
 
 @mcp.tool(description="Tag a local image for the server registry and push it in one step.")

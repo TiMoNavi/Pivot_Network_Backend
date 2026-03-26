@@ -677,7 +677,7 @@
           <div class="panel-head">
             <div>
               <h2>镜像上架</h2>
-              <p>这一块只负责调用 seller-Agent 做 registry trust、推送和平台登记。</p>
+              <p>这一块负责调用 seller-Agent 完成 registry trust、推送，并由平台后端自动把镜像发布成 buyer 可见商品。</p>
             </div>
           </div>
 
@@ -702,7 +702,10 @@
 
           <div class="button-row">
             <button class="button-secondary" onclick="configureRegistryTrust()">配置 Registry 信任</button>
-            <button class="button-primary" onclick="runPushImage()">推送并登记镜像</button>
+            <button class="button-primary" onclick="runPushImage()">推送并上架镜像</button>
+          </div>
+          <div class="footer-note" style="margin-top:12px">
+            首次配置 Registry 信任时，Windows 可能弹出证书/信任确认；继续后 seller-Agent 会重启 Docker Desktop，本机 backend、db、redis 可能短暂中断。
           </div>
         </section>
 

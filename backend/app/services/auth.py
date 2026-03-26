@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 import secrets
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -14,7 +14,15 @@ from app.models.platform import BuyerWallet
 
 
 def utcnow() -> datetime:
-    return datetime.utcnow()
+    return datetime.now(timezone.utc)
+
+
+def _coerce_utc(value: datetime | None) -> datetime | None:
+    if value is None:
+        return None
+    if value.tzinfo is None:
+        return value.replace(tzinfo=timezone.utc)
+    return value.astimezone(timezone.utc)
 
 
 def hash_password(password: str) -> str:
@@ -83,7 +91,8 @@ def issue_node_registration_token(
 def get_user_from_session_token(db: Session, raw_token: str) -> User | None:
     statement = select(SessionToken).where(SessionToken.token == raw_token, SessionToken.revoked.is_(False))
     session_token = db.scalar(statement)
-    if session_token is None or session_token.expires_at < utcnow():
+    expires_at = _coerce_utc(session_token.expires_at) if session_token is not None else None
+    if session_token is None or expires_at is None or expires_at < utcnow():
         return None
     return session_token.user
 
@@ -94,6 +103,7 @@ def get_node_registration_token(db: Session, raw_token: str) -> NodeRegistration
         NodeRegistrationToken.revoked.is_(False),
     )
     node_token = db.scalar(statement)
-    if node_token is None or node_token.expires_at < utcnow():
+    expires_at = _coerce_utc(node_token.expires_at) if node_token is not None else None
+    if node_token is None or expires_at is None or expires_at < utcnow():
         return None
     return node_token

@@ -35,8 +35,9 @@ def login_seller(payload: LoginRequest, db: Session = Depends(get_db)) -> Access
     user = authenticate_user(db, payload.email, payload.password)
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password.")
+    user_response = _serialize_user(user)
     session_token = issue_session_token(db, user)
-    return AccessTokenResponse(access_token=session_token.token, user=_serialize_user(user))
+    return AccessTokenResponse(access_token=session_token.token, user=user_response)
 
 
 @router.get("/me", response_model=UserResponse)

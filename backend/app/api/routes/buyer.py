@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 import re
 import secrets
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from urllib.parse import urlsplit, urlunsplit
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
@@ -44,7 +44,15 @@ router = APIRouter(prefix="/buyer")
 
 
 def utcnow() -> datetime:
-    return datetime.utcnow()
+    return datetime.now(timezone.utc)
+
+
+def _coerce_utc(value: datetime | None) -> datetime | None:
+    if value is None:
+        return None
+    if value.tzinfo is None:
+        return value.replace(tzinfo=timezone.utc)
+    return value.astimezone(timezone.utc)
 
 
 def _runtime_session_status_from_task(task: dict) -> str:
@@ -259,7 +267,8 @@ def report_buyer_runtime_session(
 def redeem_buyer_runtime_session(payload: BuyerRuntimeSessionRedeemRequest, db: Session = Depends(get_db)) -> BuyerRuntimeSessionRedeemResponse:
     statement = select(RuntimeAccessSession).where(RuntimeAccessSession.connect_code == payload.connect_code)
     session = db.scalar(statement)
-    if session is None or (session.expires_at and session.expires_at < utcnow()):
+    expires_at = _coerce_utc(session.expires_at) if session is not None else None
+    if session is None or (expires_at and expires_at < utcnow()):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Connect code not found or expired.")
 
     return BuyerRuntimeSessionRedeemResponse(
@@ -283,7 +292,8 @@ def bootstrap_buyer_runtime_wireguard(
     session = _get_runtime_session_for_buyer(db, session_id, current_user.id)
     if session is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Runtime session not found.")
-    if session.expires_at and session.expires_at < utcnow():
+    expires_at = _coerce_utc(session.expires_at)
+    if expires_at and expires_at < utcnow():
         session = expire_runtime_session(db, session)
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"runtime_session_{session.status}")
     if session.status in {"stopped", "expired", "failed"}:
@@ -328,7 +338,8 @@ def read_buyer_runtime_session(
     session = _get_runtime_session_for_buyer(db, session_id, current_user.id)
     if session is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Runtime session not found.")
-    if session.expires_at and session.expires_at < utcnow() and session.status not in TERMINAL_SESSION_STATES:
+    expires_at = _coerce_utc(session.expires_at)
+    if expires_at and expires_at < utcnow() and session.status not in TERMINAL_SESSION_STATES:
         session = expire_runtime_session(db, session)
 
     should_refresh_remote = session.status not in TERMINAL_SESSION_STATES or (

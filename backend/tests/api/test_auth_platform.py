@@ -1,4 +1,5 @@
 from fastapi.testclient import TestClient
+from types import SimpleNamespace
 
 
 def test_register_login_and_me_flow(client: TestClient) -> None:
@@ -28,7 +29,7 @@ def test_register_login_and_me_flow(client: TestClient) -> None:
     assert me_response.json()["seller_status"] == "active"
 
 
-def test_node_registration_heartbeat_and_image_report_flow(client: TestClient) -> None:
+def test_node_registration_heartbeat_and_image_report_flow(client: TestClient, monkeypatch) -> None:
     client.post(
         "/api/v1/auth/register",
         json={
@@ -85,6 +86,11 @@ def test_node_registration_heartbeat_and_image_report_flow(client: TestClient) -
     )
     assert heartbeat_response.status_code == 200
     assert heartbeat_response.json()["docker_status"] == "running"
+
+    monkeypatch.setattr(
+        "app.api.routes.platform.run_offer_probe_and_pricing",
+        lambda db, **kwargs: SimpleNamespace(id=1, current_billable_price_cny_per_hour=1.23),
+    )
 
     image_response = client.post(
         "/api/v1/platform/images/report",
@@ -194,7 +200,10 @@ def test_codex_runtime_and_wireguard_bootstrap_flow(client: TestClient, monkeypa
         headers={"Authorization": f"Bearer {access_token}"},
     )
     assert codex_response.status_code == 200
-    assert codex_response.json()["model"] == "gpt-5.4"
+    assert codex_response.json()["model"] == "gpt-5"
+    assert codex_response.json()["model_provider"] == "fox"
+    assert codex_response.json()["provider"]["name"] == "fox"
+    assert codex_response.json()["provider"]["base_url"] == "https://code.newcli.com/codex/v1"
     assert codex_response.json()["auth"]["OPENAI_API_KEY"] == "test-platform-key"
 
     token_response = client.post(

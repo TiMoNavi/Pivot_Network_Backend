@@ -73,8 +73,12 @@ def test_codex_and_wireguard_defaults_are_present(monkeypatch) -> None:
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     settings = Settings(_env_file=None)
 
-    assert settings.CODEX_MODEL == "gpt-5.4"
-    assert settings.CODEX_PROVIDER_BASE_URL == "https://xlabapi.top/v1"
+    assert settings.CODEX_MODEL_PROVIDER == "fox"
+    assert settings.CODEX_MODEL == "gpt-5"
+    assert settings.CODEX_REVIEW_MODEL == "gpt-5"
+    assert settings.CODEX_MODEL_REASONING_EFFORT == "high"
+    assert settings.CODEX_PROVIDER_NAME == "fox"
+    assert settings.CODEX_PROVIDER_BASE_URL == "https://code.newcli.com/codex/v1"
     assert settings.CODEX_PROVIDER_WIRE_API == "responses"
     assert settings.WIREGUARD_INTERFACE == "wg-seller"
     assert settings.WIREGUARD_NETWORK_CIDR == "10.66.66.0/24"

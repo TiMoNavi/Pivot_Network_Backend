@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import JSON, Column, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
@@ -9,7 +9,7 @@ from app.models.base import Base
 
 
 def utcnow() -> datetime:
-    return datetime.utcnow()
+    return datetime.now(timezone.utc)
 
 
 class Node(Base):
@@ -27,8 +27,8 @@ class Node(Base):
     node_class = Column(String(100), nullable=True)
     capabilities = Column(JSON, default=dict, nullable=False)
     seller_intent = Column(Text, nullable=True)
-    docker_status = Column(String(100), nullable=True)
-    swarm_state = Column(String(100), nullable=True)
+    docker_status = Column(Text, nullable=True)
+    swarm_state = Column(Text, nullable=True)
     last_heartbeat_at = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), default=utcnow, nullable=False)
     updated_at = Column(DateTime(timezone=True), default=utcnow, onupdate=utcnow, nullable=False)

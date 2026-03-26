@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -16,7 +16,15 @@ TERMINAL_SESSION_STATES = {"completed", "failed", "stopped", "expired"}
 
 
 def utcnow() -> datetime:
-    return datetime.utcnow()
+    return datetime.now(timezone.utc)
+
+
+def _coerce_utc(value: datetime | None) -> datetime | None:
+    if value is None:
+        return None
+    if value.tzinfo is None:
+        return value.replace(tzinfo=timezone.utc)
+    return value.astimezone(timezone.utc)
 
 
 def expire_runtime_session(db: Session, session: RuntimeAccessSession) -> RuntimeAccessSession:
@@ -66,11 +74,14 @@ def cleanup_expired_runtime_sessions() -> int:
 def renew_runtime_session(db: Session, session: RuntimeAccessSession, minutes: int) -> RuntimeAccessSession:
     if session.status in TERMINAL_SESSION_STATES:
         raise ValueError("runtime_session_not_renewable")
-    if session.expires_at is not None and session.expires_at < utcnow():
+    expires_at = _coerce_utc(session.expires_at)
+    if expires_at is not None and expires_at < utcnow():
         expire_runtime_session(db, session)
         raise ValueError("runtime_session_not_renewable")
-    if session.expires_at is None:
+    if expires_at is None:
         session.expires_at = utcnow()
+    else:
+        session.expires_at = expires_at
     session.expires_at = session.expires_at + timedelta(minutes=minutes)
     db.commit()
     db.refresh(session)

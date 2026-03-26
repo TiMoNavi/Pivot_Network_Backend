@@ -373,11 +373,11 @@ def validate_runtime_image_on_node(
                 last = ""
                 while time.time() < deadline:
                     ps = subprocess.run(
-                        ["docker", "service", "ps", name, "--no-trunc", "--format", "{{json .}}"],
+                        ["docker", "service", "ps", name, "--no-trunc", "--format", "{{{{json .}}}}"],
                         check=True,
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
-                        text=True,
+                        universal_newlines=True,
                     )
                     lines = [line for line in ps.stdout.splitlines() if line.strip()]
                     if lines:
@@ -393,7 +393,7 @@ def validate_runtime_image_on_node(
                     check=False,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
-                    text=True,
+                    universal_newlines=True,
                 )
                 subprocess.run(["docker", "service", "rm", name], check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 print(json.dumps({{"ok": True, "logs": logs.stdout, "state": last}}))
@@ -447,7 +447,7 @@ def probe_node_capabilities_on_node(
                     ["sh", "-lc", "nvidia-smi --query-gpu=name,memory.total --format=csv,noheader"],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
-                    text=True,
+                    universal_newlines=True,
                     check=False,
                 )
                 for line in proc.stdout.splitlines():
@@ -505,11 +505,11 @@ def probe_node_capabilities_on_node(
                 last = ""
                 while time.time() < deadline:
                     ps = subprocess.run(
-                        ["docker", "service", "ps", name, "--no-trunc", "--format", "{{json .}}"],
+                        ["docker", "service", "ps", name, "--no-trunc", "--format", "{{{{json .}}}}"],
                         check=True,
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
-                        text=True,
+                        universal_newlines=True,
                     )
                     lines = [line for line in ps.stdout.splitlines() if line.strip()]
                     if lines:
@@ -525,7 +525,7 @@ def probe_node_capabilities_on_node(
                     check=False,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
-                    text=True,
+                    universal_newlines=True,
                 )
                 subprocess.run(["docker", "service", "rm", name], check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 payload = {{}}

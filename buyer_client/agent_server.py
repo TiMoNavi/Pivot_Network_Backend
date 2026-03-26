@@ -159,6 +159,17 @@ def _wireguard_fields(record: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _compose_session_logs(record: dict[str, Any], remote_logs: str | None) -> str:
+    parts = []
+    remote = (remote_logs or "").strip()
+    local_exec = (record.get("local_exec_history") or "").strip()
+    if remote:
+        parts.append(remote)
+    if local_exec:
+        parts.append(local_exec)
+    return "\n\n".join(parts)
+
+
 def _masked_session(record: dict[str, Any]) -> dict[str, Any]:
     return {
         "local_id": record["local_id"],
@@ -212,6 +223,8 @@ def _record_from_created_session(
         "created_at": _utc_now_iso(),
         "expires_at": create_data.get("expires_at"),
         "ended_at": None,
+        "remote_logs": "",
+        "local_exec_history": "",
         "wireguard_status": "",
         "wireguard_interface": "wg-buyer",
         "wireguard_client_address": "",
@@ -254,9 +267,11 @@ def _refresh_session(local_id: str) -> dict[str, Any]:
         buyer_token=record["buyer_token"],
         session_id=record["session_id"],
     )
+    remote_logs = payload.get("logs", "")
     record["status"] = payload.get("status", "")
     record["service_name"] = payload.get("service_name", "")
-    record["logs"] = payload.get("logs", "")
+    record["remote_logs"] = remote_logs
+    record["logs"] = _compose_session_logs(record, remote_logs)
     record["ended_at"] = payload.get("ended_at")
     record["expires_at"] = payload.get("expires_at")
     record["network_mode"] = payload.get("network_mode", record.get("network_mode", "wireguard"))
@@ -598,7 +613,11 @@ def exec_runtime_session(local_id: str, payload: ExecRequest) -> JSONResponse:
         f"{exec_result.get('stdout') or ''}"
         f"{exec_result.get('stderr') or ''}"
     )
-    record["logs"] = ((record.get("logs") or "") + ("\n" if record.get("logs") else "") + transcript).strip()
+    existing_local_exec = (record.get("local_exec_history") or "").strip()
+    record["local_exec_history"] = (
+        f"{existing_local_exec}\n\n{transcript}".strip() if existing_local_exec else transcript.strip()
+    )
+    record["logs"] = _compose_session_logs(record, record.get("remote_logs") or "")
     activity = _append_activity(
         payload.state_dir or record.get("state_dir"),
         {

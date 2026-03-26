@@ -72,24 +72,9 @@ def test_publish_image_offer_and_create_billed_session(client, monkeypatch) -> N
     )
     assert register_node_response.status_code == 200
 
-    image_response = client.post(
-        "/api/v1/platform/images/report",
-        json={
-            "node_id": "offer-node-001",
-            "repository": "seller/offer-demo",
-            "tag": "v1",
-            "digest": "sha256:offer",
-            "registry": "81.70.52.75:5000",
-            "source_image": "python:3.12-alpine",
-            "status": "uploaded",
-        },
-        headers={"Authorization": f"Bearer {node_token}"},
-    )
-    image_id = image_response.json()["id"]
-
-    monkeypatch.setattr("app.api.routes.platform_offers.validate_runtime_image_on_node", lambda settings, **kwargs: {"ok": True})
+    monkeypatch.setattr("app.services.image_offer_publishing.validate_runtime_image_on_node", lambda settings, **kwargs: {"ok": True})
     monkeypatch.setattr(
-        "app.api.routes.platform_offers.probe_node_capabilities_on_node",
+        "app.services.image_offer_publishing.probe_node_capabilities_on_node",
         lambda settings, **kwargs: {"ok": True, "probe": {"cpu_logical": 24, "memory_total_mb": 32768, "gpus": []}},
     )
 
@@ -110,15 +95,29 @@ def test_publish_image_offer_and_create_billed_session(client, monkeypatch) -> N
             db.refresh(card)
         return card
 
-    monkeypatch.setattr("app.api.routes.platform_offers.ensure_current_rate_card", fake_ensure_current_rate_card)
+    monkeypatch.setattr("app.services.image_offer_publishing.ensure_current_rate_card", fake_ensure_current_rate_card)
 
-    publish_response = client.post(
+    image_response = client.post(
+        "/api/v1/platform/images/report",
+        json={
+            "node_id": "offer-node-001",
+            "repository": "seller/offer-demo",
+            "tag": "v1",
+            "digest": "sha256:offer",
+            "registry": "81.70.52.75:5000",
+            "source_image": "python:3.12-alpine",
+            "status": "uploaded",
+        },
+        headers={"Authorization": f"Bearer {node_token}"},
+    )
+
+    assert image_response.status_code == 200
+    offer_list_response = client.get(
         "/api/v1/platform/image-offers",
-        json={"image_artifact_id": image_id},
         headers={"Authorization": f"Bearer {seller_token}"},
     )
-    assert publish_response.status_code == 200
-    offer_payload = publish_response.json()
+    assert offer_list_response.status_code == 200
+    offer_payload = offer_list_response.json()[0]
     assert offer_payload["offer_status"] == "active"
     assert offer_payload["current_billable_price_cny_per_hour"] is not None
 
