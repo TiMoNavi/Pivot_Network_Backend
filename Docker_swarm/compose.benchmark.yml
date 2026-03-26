@@ -1,0 +1,22 @@
+services:
+  benchmark_worker:
+    image: ${BENCHMARK_SWARM_IMAGE}
+    environment:
+      BENCHMARK_JOB_ID: ${BENCHMARK_JOB_ID}
+      LISTING_ID: ${BENCHMARK_LISTING_ID}
+      REQUESTED_PROFILE: ${BENCHMARK_REQUESTED_PROFILE}
+      BENCHMARK_KEEPALIVE_SECONDS: ${BENCHMARK_KEEPALIVE_SECONDS}
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.platform.role == compute
+          - node.labels.platform.compute_enabled == true
+          - node.labels.platform.compute_node_id == ${BENCHMARK_TARGET_COMPUTE_NODE_ID}
+      restart_policy:
+        condition: on-failure
+      resources:
+        reservations:
+          memory: 32M
+        limits:
+          memory: 128M

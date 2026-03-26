@@ -1,0 +1,157 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    command:
+      - postgres
+      - -c
+      - shared_buffers=128MB
+      - -c
+      - max_connections=20
+      - -c
+      - work_mem=4MB
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-pivot_backend}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-postgres-password}
+    ports:
+      - "${POSTGRES_HOST_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    mem_limit: 384m
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    command:
+      - redis-server
+      - --save
+      - ""
+      - --appendonly
+      - "no"
+      - --maxmemory
+      - 64mb
+      - --maxmemory-policy
+      - allkeys-lru
+    ports:
+      - "${REDIS_HOST_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    mem_limit: 96m
+
+  registry:
+    image: registry:2
+    restart: unless-stopped
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLED: "true"
+    ports:
+      - "${REGISTRY_HOST_PORT:-5000}:5000"
+    volumes:
+      - registry_data:/var/lib/registry
+    mem_limit: 128m
+
+  portainer:
+    image: portainer/portainer-ce:lts
+    restart: unless-stopped
+    command: -H unix:///var/run/docker.sock
+    ports:
+      - "${PORTAINER_HTTPS_PORT:-9443}:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    mem_limit: 256m
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    working_dir: /app/backend
+    command: >
+      bash -lc "cd /app/backend &&
+      export PYTHONPATH=/app/backend &&
+      /app/.venv/bin/alembic upgrade head &&
+      exec /app/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    volumes:
+      - ./backend:/app/backend
+      - ./backend/uv.lock:/app/uv.lock:ro
+      - ./backend/pyproject.toml:/app/pyproject.toml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "${BACKEND_HOST_PORT:-8000}:8000"
+    env_file:
+      - ./.env
+    environment:
+      POSTGRES_SERVER: ${POSTGRES_SERVER:-db}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      POSTGRES_DB: ${POSTGRES_DB:-pivot_backend}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-postgres-password}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-local-postgres-password}@${POSTGRES_SERVER:-db}:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-pivot_backend}}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://redis:6379/0}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://redis:6379/0}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health').read()",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    mem_limit: 384m
+
+  worker:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    working_dir: /app/backend
+    command: >
+      celery -A app.worker worker --loglevel=info --pool=solo
+      --concurrency=1 --without-gossip --without-mingle
+    volumes:
+      - ./backend:/app/backend
+      - ./backend/uv.lock:/app/uv.lock:ro
+      - ./backend/pyproject.toml:/app/pyproject.toml:ro
+    env_file:
+      - ./.env
+    environment:
+      C_FORCE_ROOT: "true"
+      POSTGRES_SERVER: ${POSTGRES_SERVER:-db}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      POSTGRES_DB: ${POSTGRES_DB:-pivot_backend}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-postgres-password}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-local-postgres-password}@${POSTGRES_SERVER:-db}:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-pivot_backend}}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://redis:6379/0}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://redis:6379/0}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    mem_limit: 256m
+
+volumes:
+  postgres_data:
+  registry_data:
+  portainer_data:

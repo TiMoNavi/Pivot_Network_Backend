@@ -1,0 +1,1135 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pivot Seller Console</title>
+  <style>
+    :root {
+      --bg: #f4efe6;
+      --bg-deep: #0f2d2f;
+      --panel: rgba(255, 250, 244, 0.86);
+      --panel-strong: rgba(16, 43, 46, 0.88);
+      --line: rgba(24, 48, 51, 0.12);
+      --text: #102224;
+      --muted: #5f6b6c;
+      --accent: #d66f2c;
+      --accent-soft: rgba(214, 111, 44, 0.12);
+      --ok: #227a54;
+      --warn: #b56b1f;
+      --error: #b33f3f;
+      --info: #406d8f;
+      --shadow: 0 24px 60px rgba(16, 34, 36, 0.14);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(214, 111, 44, 0.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(25, 112, 122, 0.16), transparent 24%),
+        linear-gradient(180deg, #fbf6ef 0%, #f0e7d8 100%);
+      font-family: "Aptos", "Segoe UI Variable Text", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      width: 42vw;
+      height: 42vw;
+      border-radius: 999px;
+      filter: blur(48px);
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::before {
+      right: -12vw;
+      top: -16vw;
+      background: rgba(19, 106, 114, 0.3);
+    }
+
+    body::after {
+      left: -16vw;
+      bottom: -14vw;
+      background: rgba(214, 111, 44, 0.22);
+    }
+
+    .shell {
+      position: relative;
+      z-index: 1;
+      width: min(1400px, calc(100vw - 32px));
+      margin: 20px auto 36px;
+      display: grid;
+      gap: 18px;
+      animation: rise-in 500ms ease-out;
+    }
+
+    .hero {
+      padding: 28px;
+      border-radius: 32px;
+      background:
+        linear-gradient(135deg, rgba(12, 41, 44, 0.96), rgba(18, 64, 68, 0.92)),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent);
+      color: #f6f2eb;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.9fr);
+      gap: 20px;
+      align-items: end;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-family: "Bahnschrift", "Aptos Display", "Segoe UI Variable Display", "PingFang SC", sans-serif;
+      letter-spacing: 0.01em;
+    }
+
+    .hero h1 {
+      margin-top: 14px;
+      font-size: clamp(34px, 5vw, 56px);
+      line-height: 0.95;
+      max-width: 10ch;
+    }
+
+    .hero p {
+      max-width: 66ch;
+      margin: 14px 0 0;
+      color: rgba(246, 242, 235, 0.82);
+      line-height: 1.65;
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 12px;
+      align-content: end;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(8px);
+    }
+
+    .stat .label {
+      display: block;
+      font-size: 12px;
+      color: rgba(246, 242, 235, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .stat .value {
+      display: block;
+      margin-top: 6px;
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff7ed;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(340px, 0.95fr);
+      gap: 18px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid rgba(16, 34, 36, 0.08);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 18px 42px rgba(16, 34, 36, 0.08);
+      backdrop-filter: blur(18px);
+    }
+
+    .panel.dark {
+      color: #f3ede4;
+      background:
+        linear-gradient(180deg, rgba(14, 39, 42, 0.92), rgba(16, 49, 52, 0.92));
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .panel-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .panel.dark .panel-head p,
+    .panel.dark .meta,
+    .panel.dark .muted {
+      color: rgba(243, 237, 228, 0.72);
+    }
+
+    .pill-row,
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill,
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      background: rgba(16, 34, 36, 0.06);
+      border: 1px solid rgba(16, 34, 36, 0.08);
+      color: var(--text);
+    }
+
+    .panel.dark .pill,
+    .panel.dark .chip {
+      color: #f3ede4;
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .status {
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      border: 1px solid transparent;
+    }
+
+    .status.success {
+      color: var(--ok);
+      background: rgba(34, 122, 84, 0.12);
+      border-color: rgba(34, 122, 84, 0.2);
+    }
+
+    .status.warning {
+      color: var(--warn);
+      background: rgba(181, 107, 31, 0.12);
+      border-color: rgba(181, 107, 31, 0.2);
+    }
+
+    .status.error {
+      color: var(--error);
+      background: rgba(179, 63, 63, 0.12);
+      border-color: rgba(179, 63, 63, 0.2);
+    }
+
+    .status.info {
+      color: var(--info);
+      background: rgba(64, 109, 143, 0.12);
+      border-color: rgba(64, 109, 143, 0.2);
+    }
+
+    .readiness-grid,
+    .mini-grid,
+    .platform-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .readiness-grid {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .mini-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .platform-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .tile,
+    .list-card {
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.64);
+      display: grid;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .panel.dark .tile,
+    .panel.dark .list-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .tile h3,
+    .list-card h3 {
+      font-size: 18px;
+    }
+
+    .detail,
+    .meta {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .detail {
+      white-space: pre-line;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    label {
+      display: grid;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    input,
+    textarea,
+    button {
+      font: inherit;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(16, 34, 36, 0.12);
+      border-radius: 16px;
+      padding: 12px 14px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.8);
+      outline: none;
+      transition: border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: rgba(214, 111, 44, 0.5);
+      box-shadow: 0 0 0 4px rgba(214, 111, 44, 0.08);
+      transform: translateY(-1px);
+    }
+
+    textarea {
+      min-height: 108px;
+      resize: vertical;
+    }
+
+    .form-grid .wide {
+      grid-column: 1 / -1;
+    }
+
+    button {
+      cursor: pointer;
+      border: 0;
+      border-radius: 999px;
+      min-height: 42px;
+      padding: 0 16px;
+      transition: transform 150ms ease, filter 150ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+    }
+
+    .button-primary {
+      color: #fff4e7;
+      background: linear-gradient(135deg, #d66f2c, #b24d18);
+      box-shadow: 0 10px 24px rgba(178, 77, 24, 0.22);
+    }
+
+    .button-secondary {
+      color: var(--text);
+      background: rgba(16, 34, 36, 0.08);
+      border: 1px solid rgba(16, 34, 36, 0.08);
+    }
+
+    .button-dark {
+      color: #f7f2ea;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .stage-list,
+    .activity-list,
+    .catalog-list,
+    .steps-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .stage-item,
+    .activity-item,
+    .catalog-item {
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    .panel.dark .stage-item,
+    .panel.dark .activity-item,
+    .panel.dark .catalog-item {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .item-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .item-head strong {
+      font-size: 15px;
+    }
+
+    pre {
+      margin: 0;
+      max-height: 420px;
+      overflow: auto;
+      padding: 18px;
+      border-radius: 18px;
+      background: #0d2022;
+      color: #dce7e7;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .empty {
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px dashed rgba(16, 34, 36, 0.16);
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.42);
+      line-height: 1.6;
+    }
+
+    .footer-note {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      white-space: pre-line;
+    }
+
+    @keyframes rise-in {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 1120px) {
+      .layout,
+      .hero-grid,
+      .platform-grid,
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .shell {
+        width: min(100vw - 18px, 100%);
+        margin: 10px auto 24px;
+      }
+
+      .hero,
+      .panel {
+        padding: 16px;
+        border-radius: 22px;
+      }
+
+      .form-grid,
+      .readiness-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Pivot Compute · Seller Agent</div>
+          <h1>本地卖家控制台</h1>
+          <p>这不是一个直接碰 Docker 和 WireGuard 的浏览器壳子，而是 seller-Agent 的本地操作面。页面只做三件事：解释意图、触发动作、把当前节点和平台回显展示清楚。</p>
+        </div>
+        <div class="hero-side">
+          <div class="stat-grid">
+            <div class="stat">
+              <span class="label">Current State</span>
+              <span class="value" id="summary_status_text">LOADING</span>
+            </div>
+            <div class="stat">
+              <span class="label">Nodes On Platform</span>
+              <span class="value" id="summary_node_count">0</span>
+            </div>
+            <div class="stat">
+              <span class="label">Images On Platform</span>
+              <span class="value" id="summary_image_count">0</span>
+            </div>
+            <div class="stat">
+              <span class="label">Current Node ID</span>
+              <span class="value" id="summary_node_id" style="font-size:16px">-</span>
+            </div>
+          </div>
+          <div class="hero-actions">
+            <button class="button-primary" onclick="loadDashboard()">刷新控制面</button>
+            <button class="button-dark" onclick="focusIntent()">编辑接入意图</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <div class="stack">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>接入编排</h2>
+              <p>先让页面把你的自然语言解释清楚，再决定是否执行 onboarding。</p>
+            </div>
+            <div class="chip-row" id="summary_chips"></div>
+          </div>
+
+          <div class="form-grid">
+            <label>
+              卖家邮箱
+              <input id="email" value="seller-web@example.com" />
+            </label>
+            <label>
+              密码
+              <input id="password" type="password" value="super-secret-password" />
+            </label>
+            <label>
+              显示名
+              <input id="display_name" value="Web Seller" />
+            </label>
+            <label>
+              平台后端地址
+              <input id="backend_url" value="http://127.0.0.1:8000" />
+            </label>
+            <label class="wide">
+              卖家自然语言意图
+              <textarea id="intent">我能把自己电脑性能的10%上传到平台获取收益吗？如果可以，请帮我准备本机环境并注册成节点。</textarea>
+            </label>
+            <label class="wide">
+              本地状态目录
+              <input id="state_dir" value="d:/AI/Pivot_backend_build_team/.cache/seller-web" />
+            </label>
+          </div>
+
+          <div class="button-row">
+            <button class="button-secondary" onclick="runIntentPreview()">预览意图解释</button>
+            <button class="button-secondary" onclick="runInstaller()">安装器 Dry Run</button>
+            <button class="button-secondary" onclick="runCodexRuntime()">拉取 CodeX runtime</button>
+            <button class="button-secondary" onclick="runWireGuardBootstrap()">准备 WireGuard profile</button>
+            <button class="button-secondary" onclick="runSwarmEnsureJoined()">确保加入 Swarm</button>
+            <button class="button-primary" onclick="runOnboarding()">开始卖家接入</button>
+          </div>
+
+          <div style="margin-top:16px" class="steps-list" id="intent_preview">
+            <div class="empty">点击“预览意图解释”后，这里会显示 seller-Agent 对接入意图的解释和下一步动作。</div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>本地就绪度</h2>
+              <p>这些检查项决定 seller-Agent 现在能做什么，缺什么。</p>
+            </div>
+          </div>
+          <div class="readiness-grid" id="readiness_grid">
+            <div class="empty">正在读取本地检查项。</div>
+          </div>
+        </section>
+
+        <section class="panel dark">
+          <div class="panel-head">
+            <div>
+              <h2>最近一次操作</h2>
+              <p>这里展示最近一次安装、接入或镜像推送的阶段化结果。</p>
+            </div>
+          </div>
+          <div id="latest_operation">
+            <div class="empty">还没有执行动作。</div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>平台与本地快照</h2>
+              <p>左看平台侧真相，右看本地 seller-Agent 目前掌握的运行状态。</p>
+            </div>
+          </div>
+          <div class="platform-grid">
+            <div class="list-card">
+              <h3>平台节点</h3>
+              <div id="platform_nodes" class="activity-list">
+                <div class="empty">还没有平台节点数据。</div>
+              </div>
+            </div>
+            <div class="list-card">
+              <h3>平台镜像</h3>
+              <div id="platform_images" class="activity-list">
+                <div class="empty">还没有平台镜像数据。</div>
+              </div>
+            </div>
+            <div class="list-card">
+              <h3>本地运行时摘要</h3>
+              <div id="local_snapshot" class="activity-list">
+                <div class="empty">正在读取本地摘要。</div>
+              </div>
+            </div>
+            <div class="list-card">
+              <h3>远端 Swarm</h3>
+              <div id="remote_swarm" class="activity-list">
+                <div class="empty">正在读取远端 Swarm 摘要。</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="stack">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>镜像上架</h2>
+              <p>这一块只负责调用 seller-Agent 做 registry trust、推送和平台登记。</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <label>
+              Registry
+              <input id="registry" value="81.70.52.75:5000" />
+            </label>
+            <label>
+              本地镜像 Tag
+              <input id="local_tag" value="alpine:3.20" />
+            </label>
+            <label>
+              仓库路径
+              <input id="repository" value="seller/web-alpine" />
+            </label>
+            <label>
+              远程 Tag
+              <input id="remote_tag" value="3.20" />
+            </label>
+          </div>
+
+          <div class="button-row">
+            <button class="button-secondary" onclick="configureRegistryTrust()">配置 Registry 信任</button>
+            <button class="button-primary" onclick="runPushImage()">推送并登记镜像</button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>本地动作日志</h2>
+              <p>这些日志来自本地 seller 控制面，不是平台审计日志。</p>
+            </div>
+          </div>
+          <div id="local_activity" class="activity-list">
+            <div class="empty">还没有本地动作日志。</div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Registry 目录</h2>
+              <p>这里显示 seller-Agent 当前从 registry v2 catalog 读到的仓库名。</p>
+            </div>
+          </div>
+          <div id="registry_catalog" class="catalog-list">
+            <div class="empty">等待 registry 目录加载。</div>
+          </div>
+        </section>
+
+        <section class="panel dark">
+          <div class="panel-head">
+            <div>
+              <h2>原始输出</h2>
+              <p>保留原始 JSON，方便你直接看返回结构和调试细节。</p>
+            </div>
+          </div>
+          <pre id="output">等待初始化。</pre>
+        </section>
+
+        <section class="panel">
+          <div class="footer-note" id="next_steps_note">控制台加载后，这里会显示当前建议动作。</div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const state = {
+      dashboard: null,
+      latestOperation: null,
+    };
+
+    function valueOf(id) {
+      return document.getElementById(id).value;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function statusLabel(status) {
+      const mapping = {
+        success: "READY",
+        warning: "ATTN",
+        error: "BLOCKED",
+        info: "INFO",
+      };
+      return mapping[status] || String(status || "INFO").toUpperCase();
+    }
+
+    function statusBadge(status) {
+      return `<span class="status ${escapeHtml(status || "info")}">${escapeHtml(statusLabel(status))}</span>`;
+    }
+
+    function setOutput(title, payload) {
+      const pre = document.getElementById("output");
+      pre.textContent = `=== ${title} ===\n${JSON.stringify(payload, null, 2)}`;
+    }
+
+    async function fetchJson(url, options = {}) {
+      const response = await fetch(url, options);
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(JSON.stringify(data));
+      }
+      return data;
+    }
+
+    async function postJson(url, payload, title) {
+      try {
+        const data = await fetchJson(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        setOutput(title, data);
+        if (data.stages) {
+          renderOperation(data);
+        }
+        await loadDashboard(false);
+        return data;
+      } catch (error) {
+        const message = { ok: false, error: String(error) };
+        setOutput(`${title} failed`, message);
+        throw error;
+      }
+    }
+
+    function renderSummary(summary) {
+      document.getElementById("summary_status_text").textContent = statusLabel(summary.status);
+      document.getElementById("summary_node_count").textContent = String(summary.node_count ?? 0);
+      document.getElementById("summary_image_count").textContent = String(summary.image_count ?? 0);
+      document.getElementById("summary_node_id").textContent = summary.node_id || "-";
+
+      const chips = [
+        `Seller: ${summary.seller_email || "未登录"}`,
+        `Backend: ${summary.backend_url || "-"}`,
+        `Registry: ${summary.registry || "-"}`,
+        `Last Push: ${summary.last_pushed_image || "无"}`,
+      ];
+      document.getElementById("summary_chips").innerHTML = chips
+        .map((item) => `<span class="chip">${escapeHtml(item)}</span>`)
+        .join("");
+
+      const steps = (summary.next_steps || []).map((step) => `- ${step}`).join("\n");
+      document.getElementById("next_steps_note").textContent = steps || "当前没有额外建议。";
+    }
+
+    function renderReadiness(items) {
+      const root = document.getElementById("readiness_grid");
+      if (!items || !items.length) {
+        root.innerHTML = `<div class="empty">还没有本地检查项。</div>`;
+        return;
+      }
+      root.innerHTML = items.map((item) => `
+        <div class="tile">
+          <div class="item-head">
+            <strong>${escapeHtml(item.label)}</strong>
+            ${statusBadge(item.status)}
+          </div>
+          <div class="detail">${escapeHtml(item.detail)}</div>
+          <div class="meta">${escapeHtml(item.hint || "")}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderIntentPreview(data) {
+      const root = document.getElementById("intent_preview");
+      const result = data?.result;
+      if (!result) {
+        root.innerHTML = `<div class="empty">意图解释暂不可用。</div>`;
+        return;
+      }
+      root.innerHTML = `
+        <div class="stage-item">
+          <div class="item-head">
+            <strong>seller-Agent 的理解</strong>
+            ${statusBadge("info")}
+          </div>
+          <div class="detail">${escapeHtml(result.explanation || "")}</div>
+          <div class="meta">共享偏好：${escapeHtml(result.share_percent_preference ?? "-")}%</div>
+        </div>
+        ${(data.next_steps || []).map((step, index) => `
+          <div class="stage-item">
+            <div class="item-head">
+              <strong>下一步 ${index + 1}</strong>
+              ${statusBadge("info")}
+            </div>
+            <div class="detail">${escapeHtml(step)}</div>
+          </div>
+        `).join("")}
+      `;
+    }
+
+    function renderStages(stages) {
+      if (!stages || !stages.length) {
+        return `<div class="empty">没有阶段数据。</div>`;
+      }
+      return stages.map((stage) => `
+        <div class="stage-item">
+          <div class="item-head">
+            <strong>${escapeHtml(stage.label)}</strong>
+            ${statusBadge(stage.status)}
+          </div>
+          <div class="detail">${escapeHtml(stage.detail)}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderOperation(operation) {
+      state.latestOperation = operation;
+      const root = document.getElementById("latest_operation");
+      root.innerHTML = `
+        <div class="stage-list">
+          <div class="stage-item">
+            <div class="item-head">
+              <strong>${escapeHtml(operation.title || "最近操作")}</strong>
+              ${statusBadge(operation.status)}
+            </div>
+            <div class="detail">${escapeHtml(operation.summary || "")}</div>
+          </div>
+          ${renderStages(operation.stages)}
+        </div>
+      `;
+    }
+
+    function renderPlatformList(rootId, items, formatter, emptyText) {
+      const root = document.getElementById(rootId);
+      if (!items || !items.length) {
+        root.innerHTML = `<div class="empty">${escapeHtml(emptyText)}</div>`;
+        return;
+      }
+      root.innerHTML = items.map(formatter).join("");
+    }
+
+    function renderPlatform(platform) {
+      const overview = platform?.overview || {};
+      const swarm = platform?.swarm || {};
+
+      renderPlatformList("platform_nodes", overview.nodes, (node) => `
+        <div class="activity-item">
+          <div class="item-head">
+            <strong>${escapeHtml(node.hostname || node.node_key || "unknown-node")}</strong>
+            ${statusBadge(node.status === "available" ? "success" : "info")}
+          </div>
+          <div class="detail">共享偏好 ${escapeHtml(node.shared_percent_preference ?? "-")}% · ${escapeHtml(node.system || "-")} / ${escapeHtml(node.machine || "-")}</div>
+          <div class="meta">${escapeHtml(node.seller_intent || "没有 seller intent")}</div>
+        </div>
+      `, "平台侧还没有节点记录。");
+
+      renderPlatformList("platform_images", overview.images, (image) => `
+        <div class="activity-item">
+          <div class="item-head">
+            <strong>${escapeHtml(image.repository || "-")}:${escapeHtml(image.tag || "-")}</strong>
+            ${statusBadge(image.push_ready ? "success" : "warning")}
+          </div>
+          <div class="detail">${escapeHtml(image.registry || "-")}</div>
+          <div class="meta">${escapeHtml(image.digest || image.source_image || "还没有 digest")}</div>
+        </div>
+      `, "平台侧还没有镜像记录。");
+
+      const remoteSwarmItems = [];
+      if (swarm?.swarm) {
+        remoteSwarmItems.push(`Cluster: ${swarm.swarm.cluster_id || "-"}`);
+        remoteSwarmItems.push(`State: ${swarm.swarm.state || "-"} · nodes=${swarm.swarm.nodes ?? "-"} · managers=${swarm.swarm.managers ?? "-"}`);
+        remoteSwarmItems.push(`Manager: ${swarm.manager_host || "-"}:${swarm.manager_port || "-"}`);
+      }
+      if (swarm?.node_list) {
+        remoteSwarmItems.push(`Nodes:\n${swarm.node_list}`);
+      }
+      if (swarm?.service_list) {
+        remoteSwarmItems.push(`Services:\n${swarm.service_list}`);
+      }
+      renderPlatformList("remote_swarm", remoteSwarmItems, (item) => `
+        <div class="activity-item">
+          <div class="detail">${escapeHtml(item)}</div>
+        </div>
+      `, "还没有远端 Swarm 数据。");
+    }
+
+    function renderLocalSnapshot(local, platform) {
+      const environment = local?.environment || {};
+      const docker = local?.docker || {};
+      const swarm = local?.swarm || {};
+      const wireguard = local?.wireguard || {};
+      const activity = platform?.activity || [];
+      const remoteSwarm = platform?.swarm?.swarm || {};
+      const items = [
+        `操作系统：${environment.platform || "-"}`,
+        `Python：${environment.python || "未检测到"}`,
+        `Docker：${docker.ok ? (docker.info?.stdout || "已探测") : (docker.error || "未就绪")}`,
+        `Swarm：${swarm.info?.stdout || swarm.error || "未知"}`,
+        `WireGuard：${wireguard.profile_status || "未准备"} ${wireguard.client_address ? `· ${wireguard.client_address}` : ""}`,
+        `远端 Swarm：${remoteSwarm.state || "未知"} · nodes=${remoteSwarm.nodes ?? "-"}`,
+        `Platform API：${platform?.backend_url || "-"}`,
+        `平台连通性：${platform?.ok ? "已连通" : (platform?.error || "未完成登录")}`,
+        `平台活动数：${Array.isArray(activity) ? activity.length : 0}`,
+      ];
+      renderPlatformList("local_snapshot", items, (line) => `
+        <div class="activity-item">
+          <div class="detail">${escapeHtml(line)}</div>
+        </div>
+      `, "暂无本地运行时数据。");
+    }
+
+    function renderRegistryCatalog(local) {
+      const registry = local?.registry;
+      const root = document.getElementById("registry_catalog");
+      if (!registry?.ok) {
+        root.innerHTML = `<div class="empty">当前还没有读取到 registry 目录。${escapeHtml(registry?.catalog?.error || "")}</div>`;
+        return;
+      }
+      const repositories = registry.repositories || [];
+      if (!repositories.length) {
+        root.innerHTML = `<div class="empty">registry 已连通，但目录目前为空。</div>`;
+        return;
+      }
+      root.innerHTML = repositories.map((repository) => `
+        <div class="catalog-item">
+          <div class="detail">${escapeHtml(repository)}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderLocalActivity(items) {
+      const root = document.getElementById("local_activity");
+      if (!items || !items.length) {
+        root.innerHTML = `<div class="empty">本地还没有动作日志。</div>`;
+        return;
+      }
+      root.innerHTML = items.map((item) => `
+        <div class="activity-item">
+          <div class="item-head">
+            <strong>${escapeHtml(item.title || item.action || "local action")}</strong>
+            ${statusBadge(item.status)}
+          </div>
+          <div class="detail">${escapeHtml(item.summary || "")}</div>
+          <div class="meta">${escapeHtml(item.timestamp || "")}</div>
+        </div>
+      `).join("");
+
+      if (!state.latestOperation && items[0]?.stages) {
+        renderOperation(items[0]);
+      }
+    }
+
+    async function loadDashboard(updateOutput = true) {
+      const stateDir = valueOf("state_dir");
+      const data = await fetchJson(`/api/dashboard?state_dir=${encodeURIComponent(stateDir)}`);
+      state.dashboard = data;
+      renderSummary(data.summary || {});
+      renderReadiness(data.readiness || []);
+      renderPlatform(data.platform || {});
+      renderLocalSnapshot(data.local || {}, data.platform || {});
+      renderRegistryCatalog(data.local || {});
+      renderLocalActivity(data.local_activity || []);
+      if (updateOutput) {
+        setOutput("dashboard", data);
+      }
+    }
+
+    async function runIntentPreview() {
+      const data = await postJson("/api/intents/explain", {
+        intent: valueOf("intent"),
+        state_dir: valueOf("state_dir"),
+      }, "intent preview");
+      renderIntentPreview(data);
+    }
+
+    async function runInstaller() {
+      await postJson("/api/installer", {
+        apply: false,
+        state_dir: valueOf("state_dir"),
+      }, "installer");
+    }
+
+    async function runCodexRuntime() {
+      await postJson("/api/runtime/codex", {
+        backend_url: valueOf("backend_url"),
+        state_dir: valueOf("state_dir"),
+      }, "codex runtime");
+    }
+
+    async function runWireGuardBootstrap() {
+      await postJson("/api/wireguard/bootstrap", {
+        backend_url: valueOf("backend_url"),
+        state_dir: valueOf("state_dir"),
+      }, "wireguard bootstrap");
+    }
+
+    async function runSwarmEnsureJoined() {
+      await postJson("/api/swarm/ensure-joined", {
+        backend_url: valueOf("backend_url"),
+        state_dir: valueOf("state_dir"),
+      }, "swarm ensure joined");
+    }
+
+    async function runOnboarding() {
+      await postJson("/api/onboarding", {
+        email: valueOf("email"),
+        password: valueOf("password"),
+        display_name: valueOf("display_name"),
+        backend_url: valueOf("backend_url"),
+        intent: valueOf("intent"),
+        state_dir: valueOf("state_dir"),
+      }, "onboarding");
+    }
+
+    async function configureRegistryTrust() {
+      await postJson("/api/registry/trust", {
+        registry: valueOf("registry"),
+        restart_docker: true,
+        state_dir: valueOf("state_dir"),
+      }, "registry trust");
+    }
+
+    async function runPushImage() {
+      await postJson("/api/images/push", {
+        local_tag: valueOf("local_tag"),
+        repository: valueOf("repository"),
+        remote_tag: valueOf("remote_tag"),
+        registry: valueOf("registry"),
+        backend_url: valueOf("backend_url"),
+        state_dir: valueOf("state_dir"),
+      }, "push image");
+    }
+
+    function focusIntent() {
+      document.getElementById("intent").focus();
+    }
+
+    async function init() {
+      await loadDashboard();
+      await runIntentPreview();
+      window.setInterval(() => {
+        loadDashboard(false).catch((error) => {
+          setOutput("dashboard refresh failed", { ok: false, error: String(error) });
+        });
+      }, 15000);
+    }
+
+    init().catch((error) => {
+      setOutput("init failed", { ok: false, error: String(error) });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+      resources:
+        reservations:
+          memory: 128M
+        limits:
+          memory: 512M
+
+  redis:
+    image: redis:7
+    command: redis-server --save '' --appendonly no
+    ports:
+      - "6379:6379"
+    networks:
+      - internal
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+      resources:
+        reservations:
+          memory: 32M
+        limits:
+          memory: 128M
+
+  backend:
+    image: ${BACKEND_SWARM_IMAGE}
+    command: fastapi run app/main.py --host 0.0.0.0 --port 8000 --workers 1
+    environment: &app_environment
+      PROJECT_NAME: ${PROJECT_NAME}
+      ENVIRONMENT: ${ENVIRONMENT}
+      BACKEND_CORS_ORIGINS: ${BACKEND_CORS_ORIGINS}
+      SECRET_KEY: ${SECRET_KEY}
+      FIRST_SUPERUSER: ${FIRST_SUPERUSER}
+      FIRST_SUPERUSER_PASSWORD: ${FIRST_SUPERUSER_PASSWORD}
+      POSTGRES_SERVER: ${POSTGRES_SERVER}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      FRONTEND_HOST: ${FRONTEND_HOST}
+      SENTRY_DSN: ${SENTRY_DSN}
+      REDIS_URL: ${REDIS_URL}
+      CELERY_TASK_ALWAYS_EAGER: ${CELERY_TASK_ALWAYS_EAGER}
+    ports:
+      - "8000:8000"
+    networks:
+      - internal
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+      resources:
+        reservations:
+          memory: 256M
+        limits:
+          memory: 512M
+
+  worker:
+    image: ${BACKEND_SWARM_IMAGE}
+    command: celery -A app.worker worker --loglevel=info --pool=solo --concurrency=1
+    environment:
+      <<: *app_environment
+      C_FORCE_ROOT: "true"
+    networks:
+      - internal
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+      resources:
+        reservations:
+          memory: 128M
+        limits:
+          memory: 256M
+
+networks:
+  internal:
+    driver: overlay
+    attachable: true
+
+volumes:
+  postgres_data:

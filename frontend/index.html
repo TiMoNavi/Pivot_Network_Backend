@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pivot Platform UI</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section class="hero">
+      <div>
+        <h1>Pivot Platform UI</h1>
+        <p>最小平台前端：注册、登录、容器列表、容器详情、下单与许可证查看。页面直接调用当前后端的 `/api/v1/*`。</p>
+      </div>
+      <div class="hero-actions">
+        <button id="logout_btn" class="ghost">退出登录</button>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section class="panel auth-panel">
+        <div class="panel-head">
+          <h2>账号</h2>
+          <p>平台前端只负责签发订单和许可证，不直接启动运行时。</p>
+        </div>
+        <div class="form-grid">
+          <label>
+            Backend Base
+            <input id="backend_base" value="" placeholder="默认同源" />
+          </label>
+          <label>
+            邮箱
+            <input id="email" value="buyer-platform@example.com" />
+          </label>
+          <label>
+            密码
+            <input id="password" type="password" value="super-secret-password" />
+          </label>
+          <label>
+            显示名
+            <input id="display_name" value="Platform Buyer" />
+          </label>
+        </div>
+        <div class="button-row">
+          <button id="register_btn" class="primary">注册</button>
+          <button id="login_btn" class="secondary">登录</button>
+          <button id="refresh_btn" class="secondary">刷新数据</button>
+        </div>
+        <div id="auth_status" class="muted">未登录</div>
+      </section>
+
+      <section class="panel wallet-panel">
+        <div class="panel-head">
+          <h2>钱包</h2>
+          <p>当前只展示测试余额与小时级流水。</p>
+        </div>
+        <div id="wallet_summary" class="stat-grid">
+          <div class="stat-card">
+            <span class="stat-label">余额</span>
+            <strong id="wallet_balance">-</strong>
+          </div>
+        </div>
+        <div class="subpanel">
+          <h3>账本流水</h3>
+          <div id="ledger_list" class="list empty">登录后加载</div>
+        </div>
+      </section>
+    </div>
+
+    <div class="layout">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>容器列表</h2>
+          <p>这里展示平台可下单的镜像商品。</p>
+        </div>
+        <div id="offer_list" class="list empty">登录后加载</div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>容器详情与下单</h2>
+          <p>下单只签发许可证 token，不直接启动 buyer runtime。</p>
+        </div>
+        <div id="offer_detail" class="detail empty">请选择一个容器商品</div>
+        <div class="form-grid compact">
+          <label>
+            租用分钟
+            <input id="order_minutes" type="number" min="1" max="720" value="60" />
+          </label>
+        </div>
+        <div class="button-row">
+          <button id="order_btn" class="primary">签发许可证</button>
+        </div>
+        <div id="order_result" class="detail empty">订单和许可证结果会显示在这里</div>
+      </section>
+    </div>
+
+    <div class="layout">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>订单列表</h2>
+          <p>已签发的许可证会保留在这里。</p>
+        </div>
+        <div id="order_list" class="list empty">登录后加载</div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>许可证查询</h2>
+          <p>模拟本地客户端拿 token 后查询授权内容。</p>
+        </div>
+        <div class="form-grid compact">
+          <label class="wide">
+            License Token
+            <input id="license_token" />
+          </label>
+        </div>
+        <div class="button-row">
+          <button id="redeem_btn" class="secondary">查询许可证</button>
+        </div>
+        <div id="license_result" class="detail empty">许可证内容会显示在这里</div>
+      </section>
+    </div>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>调试输出</h2>
+      </div>
+      <pre id="debug_output">等待操作</pre>
+    </section>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>

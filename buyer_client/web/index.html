@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pivot Buyer Console</title>
+  <style>
+    :root {
+      --bg: #f7f2ea;
+      --ink: #152225;
+      --muted: #607174;
+      --line: rgba(21, 34, 37, 0.1);
+      --panel: rgba(255,255,255,0.8);
+      --panel-strong: #0e2628;
+      --ok: #23724f;
+      --warn: #a86720;
+      --error: #b24444;
+      --accent: #0b7a75;
+      --accent-2: #d6722c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(11,122,117,0.15), transparent 25%),
+        radial-gradient(circle at 100% 20%, rgba(214,114,44,0.14), transparent 20%),
+        linear-gradient(180deg, #fbf7f0 0%, #efe6d9 100%);
+      font-family: "Aptos", "Segoe UI Variable Text", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    .shell { width: min(1240px, calc(100vw - 28px)); margin: 18px auto 28px; display: grid; gap: 16px; }
+    .hero, .panel {
+      border-radius: 26px;
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 40px rgba(21, 34, 37, 0.08);
+    }
+    .hero {
+      padding: 24px;
+      color: #eef6f5;
+      background: linear-gradient(135deg, rgba(14,38,40,0.96), rgba(12,89,86,0.9));
+    }
+    .hero h1, .panel h2, .panel h3 { margin: 0; }
+    .hero p { margin: 12px 0 0; max-width: 66ch; color: rgba(238,246,245,0.8); line-height: 1.6; }
+    .layout { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 16px; }
+    .stack { display: grid; gap: 16px; }
+    .panel { background: var(--panel); padding: 18px; }
+    .panel.dark { background: rgba(14,38,40,0.94); color: #eef6f5; }
+    .panel-head { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+    .panel-head p { margin: 6px 0 0; color: var(--muted); line-height: 1.6; font-size: 14px; }
+    .panel.dark .panel-head p { color: rgba(238,246,245,0.7); }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+    .wide { grid-column: 1 / -1; }
+    label { display: grid; gap: 8px; font-size: 13px; color: var(--muted); }
+    input, textarea, button { font: inherit; }
+    input, textarea {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(21,34,37,0.12);
+      padding: 11px 13px;
+      background: rgba(255,255,255,0.88);
+      color: var(--ink);
+    }
+    textarea { min-height: 150px; resize: vertical; }
+    .button-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    button {
+      border: 0;
+      border-radius: 999px;
+      min-height: 40px;
+      padding: 0 15px;
+      cursor: pointer;
+    }
+    .primary { background: linear-gradient(135deg, var(--accent), #095753); color: white; }
+    .secondary { background: rgba(21,34,37,0.08); color: var(--ink); }
+    .danger { background: rgba(178,68,68,0.1); color: var(--error); }
+    .session-list, .activity-list, .detail-list { display: grid; gap: 10px; }
+    .card {
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.56);
+      padding: 14px;
+    }
+    .panel.dark .card { background: rgba(255,255,255,0.06); }
+    .row { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .success { background: rgba(35,114,79,0.12); color: var(--ok); }
+    .warning { background: rgba(168,103,32,0.12); color: var(--warn); }
+    .error { background: rgba(178,68,68,0.12); color: var(--error); }
+    .info { background: rgba(11,122,117,0.12); color: var(--accent); }
+    .muted { color: var(--muted); font-size: 13px; line-height: 1.6; white-space: pre-line; }
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border-radius: 16px;
+      background: #0d1f20;
+      color: #dce8e7;
+      padding: 16px;
+      max-height: 460px;
+      overflow: auto;
+    }
+    .empty {
+      border: 1px dashed rgba(21,34,37,0.18);
+      border-radius: 16px;
+      padding: 16px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.4);
+    }
+    @media (max-width: 960px) {
+      .layout, .form-grid { grid-template-columns: 1fr; }
+      .wide { grid-column: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <h1>Pivot Buyer Console</h1>
+      <p>这个本地网页只和本地 buyer 进程通信，再由本地 buyer 进程与平台后端交换必要数据。页面本身不直接碰 Docker、WireGuard、远端主机或 seller 节点。</p>
+    </section>
+
+    <div class="layout">
+      <div class="stack">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>代码与工作区执行</h2>
+              <p>支持单文件代码、本地 zip/目录、GitHub 仓库。页面只把必要输入交给本地 buyer 进程，再由本地 buyer 进程与平台后端交互。</p>
+            </div>
+          </div>
+          <div class="form-grid">
+            <label>
+              平台后端
+              <input id="backend_url" value="http://127.0.0.1:8011" />
+            </label>
+            <label>
+              买家邮箱
+              <input id="email" value="buyer-local@example.com" />
+            </label>
+            <label>
+              密码
+              <input id="password" type="password" value="super-secret-password" />
+            </label>
+            <label>
+              Seller Node Key
+              <input id="seller_node_key" value="550w-135446693705" />
+            </label>
+            <label>
+              Runtime 镜像
+              <input id="runtime_image" value="python:3.12-alpine" />
+            </label>
+            <label>
+              租期分钟
+              <input id="lease_minutes" type="number" min="1" max="720" value="30" />
+            </label>
+            <label>
+              文件名
+              <input id="code_filename" value="main.py" />
+            </label>
+            <label class="wide">
+              代码内容
+              <textarea id="code_content">print('hello from buyer runtime')
+print(6 * 7)</textarea>
+            </label>
+          </div>
+          <div class="button-row">
+            <button class="secondary" onclick="loadDashboard()">刷新控制面</button>
+            <button class="primary" onclick="runCode()">创建运行时并执行</button>
+            <button class="secondary" onclick="runArchive()">执行本地目录/zip</button>
+            <button class="secondary" onclick="runGitHub()">执行 GitHub 仓库</button>
+            <button class="secondary" onclick="startShell()">创建 shell session</button>
+            <button class="secondary" onclick="fillSample()">填充示例</button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Archive / GitHub</h2>
+              <p>本地 buyer 进程会读取目录/zip，或下载 GitHub 仓库后再交给平台。网页本身不直接碰本地文件内容。</p>
+            </div>
+          </div>
+          <div class="form-grid">
+            <label>
+              本地目录或 zip 路径
+              <input id="archive_source_path" value="" />
+            </label>
+            <label>
+              working dir
+              <input id="archive_working_dir" value="" />
+            </label>
+            <label class="wide">
+              run command
+              <input id="archive_run_command" value="python main.py" />
+            </label>
+            <label>
+              GitHub repo URL
+              <input id="github_repo_url" value="" />
+            </label>
+            <label>
+              GitHub ref
+              <input id="github_repo_ref" value="main" />
+            </label>
+            <label>
+              repo working dir
+              <input id="github_working_dir" value="" />
+            </label>
+            <label class="wide">
+              repo run command
+              <input id="github_run_command" value="python main.py" />
+            </label>
+          </div>
+        </section>
+
+        <section class="panel dark">
+          <div class="panel-head">
+            <div>
+              <h2>当前会话</h2>
+              <p>这里显示当前选中的本地 buyer session 状态和输出。</p>
+            </div>
+          </div>
+          <div id="active_session" class="detail-list">
+            <div class="empty">还没有 session。</div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>容器内 Exec</h2>
+              <p>这里只把命令交给本地 buyer 进程，再由本地 buyer 进程对本机运行中的 runtime 容器执行命令。</p>
+            </div>
+          </div>
+          <div class="form-grid">
+            <label class="wide">
+              命令
+              <input id="exec_command" value="python -V" />
+            </label>
+          </div>
+          <div class="button-row">
+            <button class="secondary" onclick="execActiveSession()">在当前 session 执行命令</button>
+            <button class="secondary" onclick="renewActiveSession()">续期 30 分钟</button>
+            <button class="secondary" onclick="bootstrapActiveWireGuard()">连接 wg-buyer</button>
+            <button class="secondary" onclick="disconnectActiveWireGuard()">断开 wg-buyer</button>
+          </div>
+        </section>
+      </div>
+
+      <div class="stack">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>本地 Buyer Sessions</h2>
+              <p>这些 session 保存在本地 buyer 进程内，只用于页面操作和轮询。</p>
+            </div>
+          </div>
+          <div id="session_list" class="session-list">
+            <div class="empty">还没有 buyer session。</div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>本地动作日志</h2>
+              <p>这里只记录本地 buyer 页面发起的动作。</p>
+            </div>
+          </div>
+          <div id="activity_list" class="activity-list">
+            <div class="empty">还没有动作日志。</div>
+          </div>
+        </section>
+
+        <section class="panel dark">
+          <div class="panel-head">
+            <div>
+              <h2>原始输出</h2>
+            </div>
+          </div>
+          <pre id="output">等待初始化。</pre>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const state = { dashboard: null, currentLocalId: null };
+
+    function valueOf(id) {
+      return document.getElementById(id).value;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function statusClass(status) {
+      if (status === "completed" || status === "running" || status === "success") return "success";
+      if (status === "failed" || status === "error") return "error";
+      if (status === "starting" || status === "created") return "warning";
+      return "info";
+    }
+
+    function setOutput(title, payload) {
+      document.getElementById("output").textContent = `=== ${title} ===\n${JSON.stringify(payload, null, 2)}`;
+    }
+
+    function leaseMinutes() {
+      return Number.parseInt(valueOf("lease_minutes") || "30", 10) || 30;
+    }
+
+    async function fetchJson(url, options = {}) {
+      const response = await fetch(url, options);
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(JSON.stringify(data));
+      }
+      return data;
+    }
+
+    async function postJson(url, payload, title) {
+      const data = await fetchJson(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      setOutput(title, data);
+      return data;
+    }
+
+    function renderActivity(items) {
+      const root = document.getElementById("activity_list");
+      if (!items?.length) {
+        root.innerHTML = '<div class="empty">还没有动作日志。</div>';
+        return;
+      }
+      root.innerHTML = items.map((item) => `
+        <div class="card">
+          <div class="row">
+            <strong>${escapeHtml(item.title || item.action || "activity")}</strong>
+            <span class="status ${statusClass(item.status)}">${escapeHtml(item.status || "info")}</span>
+          </div>
+          <div class="muted">${escapeHtml(item.summary || "")}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderSessions(items) {
+      const root = document.getElementById("session_list");
+      if (!items?.length) {
+        root.innerHTML = '<div class="empty">还没有 buyer session。</div>';
+        return;
+      }
+      root.innerHTML = items.map((item) => `
+        <div class="card">
+          <div class="row">
+            <strong>${escapeHtml(item.service_name || item.code_filename || item.local_id)}</strong>
+            <span class="status ${statusClass(item.status)}">${escapeHtml(item.status || "unknown")}</span>
+          </div>
+          <div class="muted">seller=${escapeHtml(item.seller_node_key)} | session=${escapeHtml(item.session_id)} | mode=${escapeHtml(item.session_mode || "code_run")} | wg=${escapeHtml(item.wireguard_status || "-")}</div>
+          <div class="button-row">
+            <button class="secondary" onclick="refreshSession('${escapeHtml(item.local_id)}')">刷新</button>
+            <button class="secondary" onclick="renewSession('${escapeHtml(item.local_id)}')">续期</button>
+            <button class="secondary" onclick="bootstrapWireGuard('${escapeHtml(item.local_id)}')">连接 WG</button>
+            <button class="secondary" onclick="disconnectWireGuard('${escapeHtml(item.local_id)}')">断开 WG</button>
+            <button class="danger" onclick="stopSession('${escapeHtml(item.local_id)}')">停止</button>
+            <button class="secondary" onclick="selectSession('${escapeHtml(item.local_id)}')">查看输出</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderActiveSession(session) {
+      const root = document.getElementById("active_session");
+      if (!session) {
+        root.innerHTML = '<div class="empty">还没有 session。</div>';
+        return;
+      }
+      root.innerHTML = `
+        <div class="card">
+          <div class="row">
+            <strong>${escapeHtml(session.service_name || session.code_filename || session.local_id)}</strong>
+            <span class="status ${statusClass(session.status)}">${escapeHtml(session.status || "unknown")}</span>
+          </div>
+          <div class="muted">seller=${escapeHtml(session.seller_node_key)} | session=${escapeHtml(session.session_id)} | mode=${escapeHtml(session.session_mode || "code_run")} | relay=${escapeHtml(session.relay_endpoint || "-")}</div>
+          <div class="muted">lease=${escapeHtml(session.expires_at || "-")} | network=${escapeHtml(session.network_mode || "-")} | wg=${escapeHtml(session.wireguard_status || "-")} ${escapeHtml(session.wireguard_client_address || "")} -> ${escapeHtml(session.seller_wireguard_target || "")}</div>
+        </div>
+        <pre>${escapeHtml(session.logs || "")}</pre>
+      `;
+    }
+
+    async function loadDashboard() {
+      const data = await fetchJson("/api/dashboard");
+      state.dashboard = data;
+      renderSessions(data.sessions || []);
+      renderActivity(data.local_activity || []);
+      const active = (data.sessions || []).find((item) => item.local_id === state.currentLocalId) || data.sessions?.[0] || null;
+      if (active) {
+        state.currentLocalId = active.local_id;
+      }
+      renderActiveSession(active);
+      setOutput("dashboard", data);
+    }
+
+    async function runCode() {
+      const data = await postJson("/api/runtime/run-code", {
+        backend_url: valueOf("backend_url"),
+        email: valueOf("email"),
+        password: valueOf("password"),
+        seller_node_key: valueOf("seller_node_key"),
+        runtime_image: valueOf("runtime_image"),
+        code_filename: valueOf("code_filename"),
+        code_content: valueOf("code_content"),
+        requested_duration_minutes: leaseMinutes(),
+      }, "run code");
+      state.currentLocalId = data.session.local_id;
+      await loadDashboard();
+      await refreshSession(state.currentLocalId);
+    }
+
+    async function runArchive() {
+      const data = await postJson("/api/runtime/run-archive", {
+        backend_url: valueOf("backend_url"),
+        email: valueOf("email"),
+        password: valueOf("password"),
+        seller_node_key: valueOf("seller_node_key"),
+        source_path: valueOf("archive_source_path"),
+        runtime_image: valueOf("runtime_image"),
+        working_dir: valueOf("archive_working_dir"),
+        run_command: valueOf("archive_run_command"),
+        requested_duration_minutes: leaseMinutes(),
+      }, "run archive");
+      setOutput("run archive", data);
+      await loadDashboard();
+    }
+
+    async function runGitHub() {
+      const data = await postJson("/api/runtime/run-github", {
+        backend_url: valueOf("backend_url"),
+        email: valueOf("email"),
+        password: valueOf("password"),
+        seller_node_key: valueOf("seller_node_key"),
+        repo_url: valueOf("github_repo_url"),
+        repo_ref: valueOf("github_repo_ref"),
+        runtime_image: valueOf("runtime_image"),
+        working_dir: valueOf("github_working_dir"),
+        run_command: valueOf("github_run_command"),
+        requested_duration_minutes: leaseMinutes(),
+      }, "run github");
+      setOutput("run github", data);
+      await loadDashboard();
+    }
+
+    async function startShell() {
+      const data = await postJson("/api/runtime/start-shell", {
+        backend_url: valueOf("backend_url"),
+        email: valueOf("email"),
+        password: valueOf("password"),
+        seller_node_key: valueOf("seller_node_key"),
+        runtime_image: valueOf("runtime_image"),
+        requested_duration_minutes: leaseMinutes(),
+      }, "start shell");
+      state.currentLocalId = data.session.local_id;
+      await loadDashboard();
+      await refreshSession(state.currentLocalId);
+    }
+
+    async function refreshSession(localId) {
+      const data = await fetchJson(`/api/runtime/sessions/${encodeURIComponent(localId)}`);
+      state.currentLocalId = localId;
+      renderActiveSession(data.session);
+      setOutput("session refresh", data);
+      await loadDashboard();
+    }
+
+    async function stopSession(localId) {
+      const data = await postJson(`/api/runtime/sessions/${encodeURIComponent(localId)}/stop`, {}, "stop session");
+      state.currentLocalId = localId;
+      renderActiveSession(data.session);
+      await loadDashboard();
+    }
+
+    async function execActiveSession() {
+      if (!state.currentLocalId) {
+        setOutput("exec failed", { ok: false, error: "no_active_session" });
+        return;
+      }
+      const data = await postJson(`/api/runtime/sessions/${encodeURIComponent(state.currentLocalId)}/exec`, {
+        command: valueOf("exec_command"),
+      }, "exec command");
+      renderActiveSession(data.session);
+      await loadDashboard();
+    }
+
+    async function renewSession(localId) {
+      const data = await postJson(`/api/runtime/sessions/${encodeURIComponent(localId)}/renew`, {
+        additional_minutes: leaseMinutes(),
+      }, "renew session");
+      state.currentLocalId = localId;
+      renderActiveSession(data.session);
+      await loadDashboard();
+    }
+
+    async function renewActiveSession() {
+      if (!state.currentLocalId) {
+        setOutput("renew failed", { ok: false, error: "no_active_session" });
+        return;
+      }
+      await renewSession(state.currentLocalId);
+    }
+
+    async function bootstrapWireGuard(localId) {
+      const data = await postJson(`/api/runtime/sessions/${encodeURIComponent(localId)}/wireguard/bootstrap`, {}, "wireguard bootstrap");
+      state.currentLocalId = localId;
+      renderActiveSession(data.session);
+      await loadDashboard();
+    }
+
+    async function bootstrapActiveWireGuard() {
+      if (!state.currentLocalId) {
+        setOutput("wireguard bootstrap failed", { ok: false, error: "no_active_session" });
+        return;
+      }
+      await bootstrapWireGuard(state.currentLocalId);
+    }
+
+    async function disconnectWireGuard(localId) {
+      const data = await postJson(`/api/runtime/sessions/${encodeURIComponent(localId)}/wireguard/disconnect`, {}, "wireguard disconnect");
+      state.currentLocalId = localId;
+      renderActiveSession(data.session);
+      await loadDashboard();
+    }
+
+    async function disconnectActiveWireGuard() {
+      if (!state.currentLocalId) {
+        setOutput("wireguard disconnect failed", { ok: false, error: "no_active_session" });
+        return;
+      }
+      await disconnectWireGuard(state.currentLocalId);
+    }
+
+    function selectSession(localId) {
+      state.currentLocalId = localId;
+      const session = state.dashboard?.sessions?.find((item) => item.local_id === localId) || null;
+      renderActiveSession(session);
+    }
+
+    function fillSample() {
+      document.getElementById("code_content").value = "print('hello from buyer runtime')\\nprint(6 * 7)\\n";
+      document.getElementById("code_filename").value = "main.py";
+      document.getElementById("archive_run_command").value = "python main.py";
+      document.getElementById("github_run_command").value = "python main.py";
+    }
+
+    loadDashboard().catch((error) => {
+      setOutput("init failed", { ok: false, error: String(error) });
+    });
+  </script>
+</body>
+</html>

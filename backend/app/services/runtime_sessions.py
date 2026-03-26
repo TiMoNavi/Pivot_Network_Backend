@@ -1,0 +1,77 @@
+from __future__ import annotations
+
+from datetime import datetime, timedelta
+
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from app.core.config import settings
+from app.core.db import SessionLocal
+from app.models.platform import RuntimeAccessSession
+from app.services.swarm_manager import SwarmManagerError, remove_code_runtime_service
+from app.services.wireguard_server import remove_server_peer
+
+
+TERMINAL_SESSION_STATES = {"completed", "failed", "stopped", "expired"}
+
+
+def utcnow() -> datetime:
+    return datetime.utcnow()
+
+
+def expire_runtime_session(db: Session, session: RuntimeAccessSession) -> RuntimeAccessSession:
+    if session.status in TERMINAL_SESSION_STATES:
+        return session
+
+    try:
+        remove_code_runtime_service(
+            settings,
+            service_name=session.service_name,
+            config_name=session.config_name,
+        )
+    except SwarmManagerError:
+        # Even if cleanup is partially unavailable, mark the lease as expired.
+        pass
+    if session.buyer_wireguard_public_key:
+        try:
+            remove_server_peer(settings, public_key=session.buyer_wireguard_public_key)
+        except Exception:
+            pass
+
+    session.status = "expired"
+    session.ended_at = utcnow()
+    db.commit()
+    return session
+
+
+def cleanup_expired_runtime_sessions() -> int:
+    db = SessionLocal()
+    try:
+        now = utcnow()
+        statement = select(RuntimeAccessSession).where(
+            RuntimeAccessSession.expires_at.is_not(None),
+            RuntimeAccessSession.expires_at < now,
+            RuntimeAccessSession.status.not_in(TERMINAL_SESSION_STATES),
+        )
+        sessions = db.scalars(statement).all()
+        count = 0
+        for session in sessions:
+            expire_runtime_session(db, session)
+            count += 1
+        return count
+    finally:
+        db.close()
+
+
+def renew_runtime_session(db: Session, session: RuntimeAccessSession, minutes: int) -> RuntimeAccessSession:
+    if session.status in TERMINAL_SESSION_STATES:
+        raise ValueError("runtime_session_not_renewable")
+    if session.expires_at is not None and session.expires_at < utcnow():
+        expire_runtime_session(db, session)
+        raise ValueError("runtime_session_not_renewable")
+    if session.expires_at is None:
+        session.expires_at = utcnow()
+    session.expires_at = session.expires_at + timedelta(minutes=minutes)
+    db.commit()
+    db.refresh(session)
+    return session
