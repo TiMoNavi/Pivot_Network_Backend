@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pivot Seller Client</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <p class="eyebrow">Pivot Network / Windows Seller Client</p>
+        <h1>Windows 卖家本地客户端</h1>
+        <p class="lead">
+          这个本地壳统一覆盖环境检查、WireGuard 与 Docker 状态、卖家 onboarding 会话，以及受控的 Codex + MCP
+          加入流程。当前主路径已经切到 machine-specific WireGuard config 准备、Docker Swarm 受控加入，以及 manager
+          侧真实 task 执行验证。
+        </p>
+        <div class="status-strip">
+          <span id="window-session-status">窗口 session 未初始化</span>
+          <span id="stored-session-status">本地未保存 onboarding session_id</span>
+          <span id="env-status-pill">环境状态: 未检查</span>
+          <span id="onboarding-status-pill">接入状态: 未开始</span>
+          <span id="truth-status-pill">完成标准: 未知</span>
+        </div>
+      </header>
+
+      <section class="summary-grid">
+        <article class="summary-card">
+          <p class="summary-label">本地环境</p>
+          <h2 id="summary-env">未检查</h2>
+          <p id="summary-env-detail" class="summary-detail">运行环境检查后，这里会显示健康摘要。</p>
+        </article>
+        <article class="summary-card">
+          <p class="summary-label">本地 Swarm</p>
+          <h2 id="summary-swarm">未知</h2>
+          <p id="summary-swarm-detail" class="summary-detail">等待 Docker / Swarm 检查。</p>
+        </article>
+        <article class="summary-card">
+          <p class="summary-label">Manager Raw Truth</p>
+          <h2 id="summary-manager">未知</h2>
+          <p id="summary-manager-detail" class="summary-detail">等待 manager raw truth 或 backend refresh。</p>
+        </article>
+        <article class="summary-card">
+          <p class="summary-label">Manager Task</p>
+          <h2 id="summary-target">未知</h2>
+          <p id="summary-target-detail" class="summary-detail">完成标准是 manager 侧真实 task 执行。</p>
+        </article>
+      </section>
+
+      <section class="workspace-grid">
+        <article class="panel">
+          <div class="panel-head">
+            <p class="index">01</p>
+            <div>
+              <h2>环境</h2>
+              <p>统一执行安装前体检、半自动修复、健康报告刷新和诊断包导出。</p>
+            </div>
+          </div>
+          <div id="system-feedback" class="feedback hidden"></div>
+          <div class="actions">
+            <button id="run-system-check" type="button">运行环境检查</button>
+            <button id="run-system-repair" type="button">执行半自动修复</button>
+            <button id="export-diagnostics" type="button">导出诊断包</button>
+          </div>
+          <pre id="health-output" class="output"></pre>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <p class="index">02</p>
+            <div>
+              <h2>网络 / WireGuard</h2>
+              <p>先准备这台机器自己的 WireGuard 配置，再看 WG / Overlay 路由与 manager 端口 reachability。</p>
+            </div>
+          </div>
+          <div id="network-feedback" class="feedback hidden"></div>
+          <div class="stack compact-form">
+            <label>
+              <span>Machine WG Config Path</span>
+              <input id="wireguard-config-path" placeholder="可选，例如 D:\path\wg-seller.conf" />
+            </label>
+          </div>
+          <div class="actions">
+            <button id="prepare-wireguard-config" type="button">准备本机 WG 配置</button>
+            <button id="run-overlay-check" type="button">运行 WG / Overlay 检查</button>
+          </div>
+          <form id="tcp-validation-form" class="stack compact-form">
+            <label>
+              <span>Host</span>
+              <input id="tcp-host" name="host" placeholder="例如 10.66.66.10" />
+            </label>
+            <label>
+              <span>Port</span>
+              <input id="tcp-port" name="port" type="number" min="1" max="65535" value="8080" />
+            </label>
+            <button type="submit">运行最小 TCP 校验</button>
+          </form>
+          <pre id="network-output" class="output"></pre>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <p class="index">03</p>
+            <div>
+              <h2>Docker / Swarm</h2>
+              <p>主路径是受控加入评估：准备 config、执行 join workflow，然后以 manager 侧 task 执行为完成标准。</p>
+            </div>
+          </div>
+          <div id="docker-feedback" class="feedback hidden"></div>
+          <div class="actions">
+            <button id="run-guided-join-assessment" type="button">执行受控加入评估</button>
+            <button id="run-join-workflow" type="button">仅执行本地加入流程</button>
+            <button id="verify-manager-task-execution" type="button">验证 Manager Task</button>
+            <button id="clear-join-state" type="button">清理本地 Join 状态</button>
+            <button id="refresh-status" type="button">刷新状态</button>
+          </div>
+          <pre id="docker-output" class="output"></pre>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <p class="index">04</p>
+            <div>
+              <h2>接入会话</h2>
+              <p>登录注册、创建 / 附加 session、拉取 join material，以及高级 probe / join-complete 调试入口。</p>
+            </div>
+          </div>
+          <div id="session-feedback" class="feedback hidden"></div>
+          <div class="split-form">
+            <form id="login-form" class="stack">
+              <h3>登录</h3>
+              <label>
+                <span>Email</span>
+                <input name="email" type="email" required />
+              </label>
+              <label>
+                <span>Password</span>
+                <input name="password" type="password" required />
+              </label>
+              <button type="submit">登录</button>
+            </form>
+            <form id="register-form" class="stack">
+              <h3>注册</h3>
+              <label>
+                <span>Email</span>
+                <input name="email" type="email" required />
+              </label>
+              <label>
+                <span>Display Name</span>
+                <input name="display_name" required />
+              </label>
+              <label>
+                <span>Password</span>
+                <input name="password" type="password" required />
+              </label>
+              <button type="submit">注册卖家账号</button>
+            </form>
+          </div>
+
+          <form id="session-form" class="stack session-form">
+            <h3>创建 Session</h3>
+            <label>
+              <span>Requested Accelerator</span>
+              <input name="requested_accelerator" value="gpu" />
+            </label>
+            <label>
+              <span>Requested Compute Node ID</span>
+              <input name="requested_compute_node_id" placeholder="例如 compute-seller-1" />
+            </label>
+            <label>
+              <span>Requested Offer Tier</span>
+              <input name="requested_offer_tier" placeholder="例如 medium" />
+            </label>
+            <label>
+              <span>Expected WireGuard IP</span>
+              <input name="expected_wireguard_ip" placeholder="例如 10.66.66.10" />
+            </label>
+            <button type="submit">创建 onboarding session</button>
+          </form>
+
+          <div class="actions">
+            <button id="attach-session" type="button">Attach 已保存 session_id</button>
+            <button id="load-join-material" type="button">拉取 join material</button>
+            <button id="load-drafts" type="button">加载 phase-1 drafts</button>
+            <button id="close-session" type="button">关闭当前 session</button>
+          </div>
+
+          <details class="advanced-panel">
+            <summary>高级调试入口</summary>
+            <div class="editor-grid">
+              <section class="editor-card">
+                <div class="editor-head">
+                  <h3>Linux Host Probe</h3>
+                  <button id="submit-host-probe" type="button">提交</button>
+                </div>
+                <textarea id="host-probe-editor" rows="10" class="json-editor"></textarea>
+              </section>
+              <section class="editor-card">
+                <div class="editor-head">
+                  <h3>Linux Substrate Probe</h3>
+                  <button id="submit-substrate-probe" type="button">提交</button>
+                </div>
+                <textarea id="substrate-probe-editor" rows="10" class="json-editor"></textarea>
+              </section>
+              <section class="editor-card">
+                <div class="editor-head">
+                  <h3>Container Runtime Probe</h3>
+                  <button id="submit-runtime-probe" type="button">提交</button>
+                </div>
+                <textarea id="runtime-probe-editor" rows="10" class="json-editor"></textarea>
+              </section>
+              <section class="editor-card">
+                <div class="editor-head">
+                  <h3>Join Complete</h3>
+                  <button id="submit-join-complete" type="button">提交</button>
+                </div>
+                <textarea id="join-complete-editor" rows="10" class="json-editor"></textarea>
+              </section>
+            </div>
+          </details>
+
+          <pre id="session-output" class="output"></pre>
+          <pre id="join-material-output" class="output"></pre>
+        </article>
+
+        <article class="panel panel-wide">
+          <div class="panel-head">
+            <p class="index">05</p>
+            <div>
+              <h2>AI 助手</h2>
+              <p>本地 Web 壳与 session-scoped MCP 共用一套受控工具面，不开放任意 shell。</p>
+            </div>
+          </div>
+          <div id="assistant-feedback" class="feedback hidden"></div>
+          <form id="assistant-form" class="stack">
+            <label>
+              <span>Message</span>
+              <textarea
+                name="message"
+                rows="6"
+                placeholder="例如：帮我接入。或者：帮我加入 swarm，并以 manager task execution 作为完成标准。"
+                required
+              ></textarea>
+            </label>
+            <button type="submit">发送给本地助手</button>
+          </form>
+          <pre id="assistant-output" class="output"></pre>
+        </article>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

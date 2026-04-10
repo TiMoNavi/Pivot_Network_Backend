@@ -1,0 +1,42 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: plantform_backend_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${BACKEND_POSTGRES_USER:-plantform}
+      POSTGRES_PASSWORD: ${BACKEND_POSTGRES_PASSWORD:-plantform}
+      POSTGRES_DB: ${BACKEND_POSTGRES_DB:-plantform_backend}
+    ports:
+      - "${BACKEND_POSTGRES_PORT:-55432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${BACKEND_POSTGRES_USER:-plantform} -d ${BACKEND_POSTGRES_DB:-plantform_backend}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: plantform_backend_api
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      BACKEND_POSTGRES_HOST: postgres
+      BACKEND_POSTGRES_PORT: 5432
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "${BACKEND_APP_PORT:-8000}:8000"
+    volumes:
+      - .:/app
+    command: >
+      uvicorn backend_app.main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  postgres_data:

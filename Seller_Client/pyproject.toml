@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "seller-client"
+version = "0.1.0"
+description = "Phase 1 seller bootstrap contracts and runtime planning"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.111,<1.0",
+    "httpx>=0.27,<1.0",
+    "mcp>=1.27,<2.0",
+    "uvicorn>=0.30,<1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3,<9.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+include = ["seller_client_app*"]

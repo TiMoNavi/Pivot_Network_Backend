@@ -1,0 +1,4 @@
+/root/Pivot_network/Portainer
+/root/Pivot_network/Portainer/README.md
+/root/Pivot_network/Portainer/compose.portainer.yml
+/root/Pivot_network/Portainer/deploy-portainer.sh

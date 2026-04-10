@@ -1,0 +1,23 @@
+total 132
+drwxr-xr-x 15 root root  4096 Apr  9 23:16 .
+dr-xr-x--- 20 root root  4096 Apr  9 00:04 ..
+drwxr-xr-x  3 root root  4096 Apr  7 19:26 .cccc
+drwxr-xr-x  6 root root  4096 Apr  7 00:59 Buyer_Client
+-rw-r--r--  1 root root  7255 Apr  8 08:26 CCCC_HELP.md
+drwxr-xr-x  8 root root  4096 Apr  5 03:22 Docker_Swarm
+-rw-r--r--  1 root root  5434 Apr  9 00:49 PROJECT.md
+drwxr-xr-x 11 root root  4096 Apr  8 23:13 Plantform_Backend
+-rw-r--r--  1 root root  3565 Apr  9 23:03 SWARM_WIREGUARD_TRUTH_ISSUE_2026-04-09.md
+drwxr-xr-x  7 root root  4096 Apr  9 21:43 Seller_Client
+drwxr-xr-x  4 root root  4096 Apr  7 00:59 Shared
+drwxr-xr-x  2 root root  4096 Apr  9 23:03 _client_backups
+drwxr-xr-x  3 root root  4096 Apr  9 23:16 archive
+drwxr-xr-x 12 root root  4096 Apr  7 01:44 backup_wasted
+drwxr-xr-x  5 root root  4096 Apr  7 01:14 docs
+drwxr-xr-x  2 root root  4096 Apr  7 00:57 env_setup_and_install
+drwxr-xr-x  2 root root  4096 Apr  8 02:48 win_romote
+drwxr-xr-x  4 root root  4096 Apr  5 01:54 wireguard
+-rw-r--r--  1 root root 10418 Apr  8 07:59 个人算力交易平台MVP技术方案.md
+-rw-r--r--  1 root root 20742 Apr  7 19:00 架构疑难质疑与证据核查.md
+-rw-r--r--  1 root root  5399 Apr  8 07:58 架构说明.md
+-rw-r--r--  1 root root  6648 Apr  7 18:55 项目结构说明.md

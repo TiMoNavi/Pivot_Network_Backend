@@ -1,0 +1,5 @@
+DRIVER    VOLUME NAME
+local     backend_postgres_data
+local     f44a3c44f7ffcc703d81b8b8a9d875f99b43cd65abf5ebb9c4b3157fc586594c
+local     plantform_backend_postgres_data
+local     portainer_portainer_data

@@ -1,0 +1,1 @@
+/root/Pivot_network/Docker_Swarm_Adapter

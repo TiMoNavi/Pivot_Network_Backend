@@ -1,0 +1,5 @@
+total 24
+drwx------   3 root root  4096 Apr  8 06:33 .
+drwxr-xr-x 113 root root 12288 Apr  9 18:48 ..
+drwxr-xr-x   2 root root  4096 Apr  5 01:54 archive
+-rw-------   1 root root  1703 Apr  8 06:33 wg0.conf

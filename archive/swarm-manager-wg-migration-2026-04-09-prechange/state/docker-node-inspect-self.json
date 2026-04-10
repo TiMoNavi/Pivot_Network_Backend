@@ -1,0 +1,115 @@
+[
+    {
+        "ID": "t1p4v4byyo64dyefhd804wlzx",
+        "Version": {
+            "Index": 3692
+        },
+        "CreatedAt": "2026-04-04T18:06:02.833674916Z",
+        "UpdatedAt": "2026-04-08T10:14:59.871591326Z",
+        "Spec": {
+            "Labels": {
+                "platform.compute_enabled": "false",
+                "platform.control_plane": "true",
+                "platform.managed": "true",
+                "platform.manager_addr": "81.70.52.75",
+                "platform.role": "control-plane"
+            },
+            "Role": "manager",
+            "Availability": "active"
+        },
+        "Description": {
+            "Hostname": "VM-0-3-opencloudos",
+            "Platform": {
+                "Architecture": "x86_64",
+                "OS": "linux"
+            },
+            "Resources": {
+                "NanoCPUs": 2000000000,
+                "MemoryBytes": 8067411968
+            },
+            "Engine": {
+                "EngineVersion": "26.1.3",
+                "Plugins": [
+                    {
+                        "Type": "Log",
+                        "Name": "awslogs"
+                    },
+                    {
+                        "Type": "Log",
+                        "Name": "fluentd"
+                    },
+                    {
+                        "Type": "Log",
+                        "Name": "gcplogs"
+                    },
+                    {
+                        "Type": "Log",
+                        "Name": "gelf"
+                    },
+                    {
+                        "Type": "Log",
+                        "Name": "journald"
+                    },
+                    {
+                        "Type": "Log",
+                        "Name": "json-file"
+                    },
+                    {
+                        "Type": "Log",
+                        "Name": "local"
+                    },
+                    {
+                        "Type": "Log",
+                        "Name": "splunk"
+                    },
+                    {
+                        "Type": "Log",
+                        "Name": "syslog"
+                    },
+                    {
+                        "Type": "Network",
+                        "Name": "bridge"
+                    },
+                    {
+                        "Type": "Network",
+                        "Name": "host"
+                    },
+                    {
+                        "Type": "Network",
+                        "Name": "ipvlan"
+                    },
+                    {
+                        "Type": "Network",
+                        "Name": "macvlan"
+                    },
+                    {
+                        "Type": "Network",
+                        "Name": "null"
+                    },
+                    {
+                        "Type": "Network",
+                        "Name": "overlay"
+                    },
+                    {
+                        "Type": "Volume",
+                        "Name": "local"
+                    }
+                ]
+            },
+            "TLSInfo": {
+                "TrustRoot": "-----BEGIN CERTIFICATE-----\nMIIBajCCARCgAwIBAgIUL2AWaUg/kFL0YD12sUSm+hNrH3kwCgYIKoZIzj0EAwIw\nEzERMA8GA1UEAxMIc3dhcm0tY2EwHhcNMjYwNDA0MTgwMTAwWhcNNDYwMzMwMTgw\nMTAwWjATMREwDwYDVQQDEwhzd2FybS1jYTBZMBMGByqGSM49AgEGCCqGSM49AwEH\nA0IABERvSuMRNhlztbtZ+yi25yvTgtJOnv4x+VboHZrsX8OE1gzkvJUBpqxHd05i\nrWMuFnl55fUv+ia/xofR/CW/CPSjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMB\nAf8EBTADAQH/MB0GA1UdDgQWBBSrBlABKWbEkxqjBT4NYy9+Yud6KzAKBggqhkjO\nPQQDAgNIADBFAiEApfrN2HaT4LWhQasmPt4uI54yBjjlyK5uHWa6EHvVCdoCID2B\nAi4135fiKGkbiRgROMtRM8aIUwiKkYFVx0dhoxcw\n-----END CERTIFICATE-----\n",
+                "CertIssuerSubject": "MBMxETAPBgNVBAMTCHN3YXJtLWNh",
+                "CertIssuerPublicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAERG9K4xE2GXO1u1n7KLbnK9OC0k6e/jH5Vugdmuxfw4TWDOS8lQGmrEd3TmKtYy4WeXnl9S/6Jr/Gh9H8Jb8I9A=="
+            }
+        },
+        "Status": {
+            "State": "ready",
+            "Addr": "81.70.52.75"
+        },
+        "ManagerStatus": {
+            "Leader": true,
+            "Reachability": "reachable",
+            "Addr": "81.70.52.75:2377"
+        }
+    }
+]

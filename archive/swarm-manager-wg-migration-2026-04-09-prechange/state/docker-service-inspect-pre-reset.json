@@ -1,0 +1,781 @@
+[
+    {
+        "ID": "4hwc4bada3f571dkkjaa99n56",
+        "Version": {
+            "Index": 5757
+        },
+        "CreatedAt": "2026-04-04T18:06:48.751493497Z",
+        "UpdatedAt": "2026-04-09T15:17:42.489495178Z",
+        "Spec": {
+            "Name": "portainer_agent",
+            "Labels": {
+                "com.docker.stack.image": "portainer/agent:lts",
+                "com.docker.stack.namespace": "portainer"
+            },
+            "TaskTemplate": {
+                "ContainerSpec": {
+                    "Image": "portainer/agent:lts@sha256:7af856876dcb2778108bf6846f3da31b176443db90e3de31fcfdf17e5ab7857e",
+                    "Labels": {
+                        "com.docker.stack.namespace": "portainer"
+                    },
+                    "Privileges": {
+                        "CredentialSpec": null,
+                        "SELinuxContext": null,
+                        "NoNewPrivileges": false
+                    },
+                    "Mounts": [
+                        {
+                            "Type": "bind",
+                            "Source": "/var/run/docker.sock",
+                            "Target": "/var/run/docker.sock"
+                        },
+                        {
+                            "Type": "bind",
+                            "Source": "/var/lib/docker/volumes",
+                            "Target": "/var/lib/docker/volumes"
+                        }
+                    ],
+                    "StopGracePeriod": 10000000000,
+                    "DNSConfig": {},
+                    "Isolation": "default"
+                },
+                "Resources": {},
+                "RestartPolicy": {
+                    "Condition": "any",
+                    "Delay": 5000000000,
+                    "MaxAttempts": 0
+                },
+                "Placement": {
+                    "Constraints": [
+                        "node.platform.os == linux"
+                    ],
+                    "Platforms": [
+                        {
+                            "Architecture": "amd64",
+                            "OS": "linux"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "arm64",
+                            "OS": "linux"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "OS": "linux"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "ppc64le",
+                            "OS": "linux"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "amd64",
+                            "OS": "windows"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "amd64",
+                            "OS": "windows"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "amd64",
+                            "OS": "windows"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        }
+                    ]
+                },
+                "Networks": [
+                    {
+                        "Target": "fsk1wt29rifvcsrq297ygyy0b",
+                        "Aliases": [
+                            "agent"
+                        ]
+                    }
+                ],
+                "ForceUpdate": 0,
+                "Runtime": "container"
+            },
+            "Mode": {
+                "Global": {}
+            },
+            "UpdateConfig": {
+                "Parallelism": 1,
+                "FailureAction": "pause",
+                "Monitor": 5000000000,
+                "MaxFailureRatio": 0,
+                "Order": "stop-first"
+            },
+            "RollbackConfig": {
+                "Parallelism": 1,
+                "FailureAction": "pause",
+                "Monitor": 5000000000,
+                "MaxFailureRatio": 0,
+                "Order": "stop-first"
+            },
+            "EndpointSpec": {
+                "Mode": "vip"
+            }
+        },
+        "PreviousSpec": {
+            "Name": "portainer_agent",
+            "Labels": {
+                "com.docker.stack.image": "portainer/agent:lts",
+                "com.docker.stack.namespace": "portainer"
+            },
+            "TaskTemplate": {
+                "ContainerSpec": {
+                    "Image": "portainer/agent:lts@sha256:7af856876dcb2778108bf6846f3da31b176443db90e3de31fcfdf17e5ab7857e",
+                    "Labels": {
+                        "com.docker.stack.namespace": "portainer"
+                    },
+                    "Privileges": {
+                        "CredentialSpec": null,
+                        "SELinuxContext": null,
+                        "NoNewPrivileges": false
+                    },
+                    "Mounts": [
+                        {
+                            "Type": "bind",
+                            "Source": "/var/run/docker.sock",
+                            "Target": "/var/run/docker.sock"
+                        },
+                        {
+                            "Type": "bind",
+                            "Source": "/var/lib/docker/volumes",
+                            "Target": "/var/lib/docker/volumes"
+                        }
+                    ],
+                    "Isolation": "default"
+                },
+                "Resources": {},
+                "Placement": {
+                    "Constraints": [
+                        "node.platform.os == linux"
+                    ],
+                    "Platforms": [
+                        {
+                            "Architecture": "amd64",
+                            "OS": "linux"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "arm64",
+                            "OS": "linux"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "OS": "linux"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "ppc64le",
+                            "OS": "linux"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "amd64",
+                            "OS": "windows"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "amd64",
+                            "OS": "windows"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "amd64",
+                            "OS": "windows"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        }
+                    ]
+                },
+                "Networks": [
+                    {
+                        "Target": "fsk1wt29rifvcsrq297ygyy0b",
+                        "Aliases": [
+                            "agent"
+                        ]
+                    }
+                ],
+                "ForceUpdate": 0,
+                "Runtime": "container"
+            },
+            "Mode": {
+                "Global": {}
+            },
+            "EndpointSpec": {
+                "Mode": "vip"
+            }
+        },
+        "Endpoint": {
+            "Spec": {
+                "Mode": "vip"
+            },
+            "VirtualIPs": [
+                {
+                    "NetworkID": "fsk1wt29rifvcsrq297ygyy0b",
+                    "Addr": "10.0.1.2/24"
+                }
+            ]
+        }
+    },
+    {
+        "ID": "kp9r31zo7rasioizs392t85y7",
+        "Version": {
+            "Index": 5757
+        },
+        "CreatedAt": "2026-04-04T18:07:04.937485154Z",
+        "UpdatedAt": "2026-04-09T15:17:42.489621867Z",
+        "Spec": {
+            "Name": "portainer_portainer",
+            "Labels": {
+                "com.docker.stack.image": "portainer/portainer-ce:lts",
+                "com.docker.stack.namespace": "portainer"
+            },
+            "TaskTemplate": {
+                "ContainerSpec": {
+                    "Image": "portainer/portainer-ce:lts@sha256:1ae8e65d50ca5498cb2c33e617495a1e3ef245b0d2392b4a44c70ae09b822891",
+                    "Labels": {
+                        "com.docker.stack.namespace": "portainer"
+                    },
+                    "Args": [
+                        "-H",
+                        "tcp://tasks.agent:9001",
+                        "--tlsskipverify"
+                    ],
+                    "Privileges": {
+                        "CredentialSpec": null,
+                        "SELinuxContext": null,
+                        "NoNewPrivileges": false
+                    },
+                    "Mounts": [
+                        {
+                            "Type": "volume",
+                            "Source": "portainer_portainer_data",
+                            "Target": "/data",
+                            "VolumeOptions": {
+                                "Labels": {
+                                    "com.docker.stack.namespace": "portainer"
+                                }
+                            }
+                        }
+                    ],
+                    "StopGracePeriod": 10000000000,
+                    "DNSConfig": {},
+                    "Isolation": "default"
+                },
+                "Resources": {},
+                "RestartPolicy": {
+                    "Condition": "any",
+                    "Delay": 5000000000,
+                    "MaxAttempts": 0
+                },
+                "Placement": {
+                    "Constraints": [
+                        "node.role == manager"
+                    ],
+                    "Platforms": [
+                        {
+                            "Architecture": "amd64",
+                            "OS": "linux"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "arm64",
+                            "OS": "linux"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "OS": "linux"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "ppc64le",
+                            "OS": "linux"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "amd64",
+                            "OS": "windows"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "amd64",
+                            "OS": "windows"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "amd64",
+                            "OS": "windows"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        }
+                    ]
+                },
+                "Networks": [
+                    {
+                        "Target": "fsk1wt29rifvcsrq297ygyy0b",
+                        "Aliases": [
+                            "portainer"
+                        ]
+                    }
+                ],
+                "ForceUpdate": 0,
+                "Runtime": "container"
+            },
+            "Mode": {
+                "Replicated": {
+                    "Replicas": 1
+                }
+            },
+            "UpdateConfig": {
+                "Parallelism": 1,
+                "FailureAction": "pause",
+                "Monitor": 5000000000,
+                "MaxFailureRatio": 0,
+                "Order": "stop-first"
+            },
+            "RollbackConfig": {
+                "Parallelism": 1,
+                "FailureAction": "pause",
+                "Monitor": 5000000000,
+                "MaxFailureRatio": 0,
+                "Order": "stop-first"
+            },
+            "EndpointSpec": {
+                "Mode": "vip",
+                "Ports": [
+                    {
+                        "Protocol": "tcp",
+                        "TargetPort": 9443,
+                        "PublishedPort": 9443,
+                        "PublishMode": "ingress"
+                    }
+                ]
+            }
+        },
+        "PreviousSpec": {
+            "Name": "portainer_portainer",
+            "Labels": {
+                "com.docker.stack.image": "portainer/portainer-ce:lts",
+                "com.docker.stack.namespace": "portainer"
+            },
+            "TaskTemplate": {
+                "ContainerSpec": {
+                    "Image": "portainer/portainer-ce:lts@sha256:1ae8e65d50ca5498cb2c33e617495a1e3ef245b0d2392b4a44c70ae09b822891",
+                    "Labels": {
+                        "com.docker.stack.namespace": "portainer"
+                    },
+                    "Args": [
+                        "-H",
+                        "tcp://tasks.agent:9001",
+                        "--tlsskipverify"
+                    ],
+                    "Privileges": {
+                        "CredentialSpec": null,
+                        "SELinuxContext": null,
+                        "NoNewPrivileges": false
+                    },
+                    "Mounts": [
+                        {
+                            "Type": "volume",
+                            "Source": "portainer_portainer_data",
+                            "Target": "/data",
+                            "VolumeOptions": {
+                                "Labels": {
+                                    "com.docker.stack.namespace": "portainer"
+                                }
+                            }
+                        }
+                    ],
+                    "Isolation": "default"
+                },
+                "Resources": {},
+                "Placement": {
+                    "Constraints": [
+                        "node.role == manager"
+                    ],
+                    "Platforms": [
+                        {
+                            "Architecture": "amd64",
+                            "OS": "linux"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "arm64",
+                            "OS": "linux"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "OS": "linux"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "ppc64le",
+                            "OS": "linux"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "amd64",
+                            "OS": "windows"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "amd64",
+                            "OS": "windows"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        },
+                        {
+                            "Architecture": "amd64",
+                            "OS": "windows"
+                        },
+                        {
+                            "Architecture": "unknown",
+                            "OS": "unknown"
+                        }
+                    ]
+                },
+                "Networks": [
+                    {
+                        "Target": "fsk1wt29rifvcsrq297ygyy0b",
+                        "Aliases": [
+                            "portainer"
+                        ]
+                    }
+                ],
+                "ForceUpdate": 0,
+                "Runtime": "container"
+            },
+            "Mode": {
+                "Replicated": {
+                    "Replicas": 1
+                }
+            },
+            "EndpointSpec": {
+                "Mode": "vip",
+                "Ports": [
+                    {
+                        "Protocol": "tcp",
+                        "TargetPort": 9443,
+                        "PublishedPort": 9443,
+                        "PublishMode": "ingress"
+                    }
+                ]
+            }
+        },
+        "Endpoint": {
+            "Spec": {
+                "Mode": "vip",
+                "Ports": [
+                    {
+                        "Protocol": "tcp",
+                        "TargetPort": 9443,
+                        "PublishedPort": 9443,
+                        "PublishMode": "ingress"
+                    }
+                ]
+            },
+            "Ports": [
+                {
+                    "Protocol": "tcp",
+                    "TargetPort": 9443,
+                    "PublishedPort": 9443,
+                    "PublishMode": "ingress"
+                }
+            ],
+            "VirtualIPs": [
+                {
+                    "NetworkID": "iob1wggad5srrhdne7ay69khj",
+                    "Addr": "10.0.0.3/24"
+                },
+                {
+                    "NetworkID": "fsk1wt29rifvcsrq297ygyy0b",
+                    "Addr": "10.0.1.5/24"
+                }
+            ]
+        }
+    },
+    {
+        "ID": "be5odsnlmxuw33w31wagpcf11",
+        "Version": {
+            "Index": 5757
+        },
+        "CreatedAt": "2026-04-06T11:15:25.386076327Z",
+        "UpdatedAt": "2026-04-09T15:17:42.489552519Z",
+        "Spec": {
+            "Name": "gateway-0eb8940e-2b5d-46d2-a1af-873334d8d9ff",
+            "Labels": {
+                "pivot.bundle": "runtime-session",
+                "pivot.compute_node_id": "compute-win-verify-01",
+                "pivot.offer_id": "b34a8b01-2dde-4c29-816a-ff6abdb94887",
+                "pivot.role": "gateway",
+                "pivot.session_id": "0eb8940e-2b5d-46d2-a1af-873334d8d9ff"
+            },
+            "TaskTemplate": {
+                "ContainerSpec": {
+                    "Image": "caddy:2-alpine",
+                    "Command": [
+                        "caddy"
+                    ],
+                    "Args": [
+                        "reverse-proxy",
+                        "--from",
+                        ":8080",
+                        "--to",
+                        "http://10.0.12.2:7681"
+                    ],
+                    "Init": false,
+                    "StopGracePeriod": 10000000000,
+                    "DNSConfig": {},
+                    "Isolation": "default"
+                },
+                "Resources": {
+                    "Limits": {},
+                    "Reservations": {}
+                },
+                "RestartPolicy": {
+                    "Condition": "none",
+                    "Delay": 5000000000,
+                    "MaxAttempts": 0
+                },
+                "Placement": {
+                    "Constraints": [
+                        "node.id==t1p4v4byyo64dyefhd804wlzx"
+                    ]
+                },
+                "Networks": [
+                    {
+                        "Target": "i0v42qw7hn6gyum6lgtr81z7d"
+                    }
+                ],
+                "ForceUpdate": 0,
+                "Runtime": "container"
+            },
+            "Mode": {
+                "Replicated": {
+                    "Replicas": 1
+                }
+            },
+            "UpdateConfig": {
+                "Parallelism": 1,
+                "FailureAction": "pause",
+                "Monitor": 5000000000,
+                "MaxFailureRatio": 0,
+                "Order": "stop-first"
+            },
+            "RollbackConfig": {
+                "Parallelism": 1,
+                "FailureAction": "pause",
+                "Monitor": 5000000000,
+                "MaxFailureRatio": 0,
+                "Order": "stop-first"
+            },
+            "EndpointSpec": {
+                "Mode": "vip",
+                "Ports": [
+                    {
+                        "Protocol": "tcp",
+                        "TargetPort": 8080,
+                        "PublishedPort": 32080,
+                        "PublishMode": "host"
+                    }
+                ]
+            }
+        },
+        "Endpoint": {
+            "Spec": {
+                "Mode": "vip",
+                "Ports": [
+                    {
+                        "Protocol": "tcp",
+                        "TargetPort": 8080,
+                        "PublishedPort": 32080,
+                        "PublishMode": "host"
+                    }
+                ]
+            },
+            "Ports": [
+                {
+                    "Protocol": "tcp",
+                    "TargetPort": 8080,
+                    "PublishedPort": 32080,
+                    "PublishMode": "host"
+                }
+            ],
+            "VirtualIPs": [
+                {
+                    "NetworkID": "i0v42qw7hn6gyum6lgtr81z7d",
+                    "Addr": "10.0.12.5/24"
+                }
+            ]
+        }
+    },
+    {
+        "ID": "ip88m138mce39hhgo7xbqqkgz",
+        "Version": {
+            "Index": 5757
+        },
+        "CreatedAt": "2026-04-06T11:15:25.189838582Z",
+        "UpdatedAt": "2026-04-09T15:17:42.489580799Z",
+        "Spec": {
+            "Name": "runtime-0eb8940e-2b5d-46d2-a1af-873334d8d9ff",
+            "Labels": {
+                "pivot.bundle": "runtime-session",
+                "pivot.compute_node_id": "compute-win-verify-01",
+                "pivot.offer_id": "b34a8b01-2dde-4c29-816a-ff6abdb94887",
+                "pivot.role": "runtime",
+                "pivot.session_id": "0eb8940e-2b5d-46d2-a1af-873334d8d9ff"
+            },
+            "TaskTemplate": {
+                "ContainerSpec": {
+                    "Image": "managed-runtime-test:local",
+                    "Env": [
+                        "PIVOT_SESSION_ID=0eb8940e-2b5d-46d2-a1af-873334d8d9ff",
+                        "PIVOT_OFFER_ID=b34a8b01-2dde-4c29-816a-ff6abdb94887",
+                        "PIVOT_SHELL_AGENT_PORT=7681"
+                    ],
+                    "Init": false,
+                    "StopGracePeriod": 10000000000,
+                    "DNSConfig": {},
+                    "Isolation": "default"
+                },
+                "Resources": {
+                    "Limits": {},
+                    "Reservations": {}
+                },
+                "RestartPolicy": {
+                    "Condition": "none",
+                    "Delay": 5000000000,
+                    "MaxAttempts": 0
+                },
+                "Placement": {
+                    "Constraints": [
+                        "node.id==vajx7hby5s6ht29bqts9t6zut"
+                    ]
+                },
+                "Networks": [
+                    {
+                        "Target": "i0v42qw7hn6gyum6lgtr81z7d"
+                    }
+                ],
+                "ForceUpdate": 0,
+                "Runtime": "container"
+            },
+            "Mode": {
+                "Replicated": {
+                    "Replicas": 1
+                }
+            },
+            "UpdateConfig": {
+                "Parallelism": 1,
+                "FailureAction": "pause",
+                "Monitor": 5000000000,
+                "MaxFailureRatio": 0,
+                "Order": "stop-first"
+            },
+            "RollbackConfig": {
+                "Parallelism": 1,
+                "FailureAction": "pause",
+                "Monitor": 5000000000,
+                "MaxFailureRatio": 0,
+                "Order": "stop-first"
+            },
+            "EndpointSpec": {
+                "Mode": "vip"
+            }
+        },
+        "Endpoint": {
+            "Spec": {
+                "Mode": "vip"
+            },
+            "VirtualIPs": [
+                {
+                    "NetworkID": "i0v42qw7hn6gyum6lgtr81z7d",
+                    "Addr": "10.0.12.2/24"
+                }
+            ]
+        }
+    }
+]

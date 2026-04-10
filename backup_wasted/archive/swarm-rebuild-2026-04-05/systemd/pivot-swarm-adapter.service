@@ -1,0 +1,22 @@
+[Unit]
+Description=Pivot Docker Swarm Adapter
+After=network-online.target docker.service wg-quick@wg0.service
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/Pivot_network/Pivot_Network_Backend/backend
+Environment=PYTHONPATH=/root/Pivot_network/Pivot_Network_Backend/backend
+Environment=SWARM_ADAPTER_BASE_URL=
+Environment=SWARM_MANAGER_LOCAL_MODE=true
+Environment=WIREGUARD_SERVER_LOCAL_MODE=true
+Environment=WIREGUARD_SERVER_SSH_ENABLED=false
+EnvironmentFile=/root/Pivot_network/Pivot_Network_Backend/.env
+ExecStart=/root/Pivot_network/Pivot_Network_Backend/.venv-swarm-adapter/bin/uvicorn app.swarm_adapter_main:app --host 0.0.0.0 --port 8010
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

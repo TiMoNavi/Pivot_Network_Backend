@@ -1,0 +1,1 @@
+error: Web port 8848 is unavailable on 0.0.0.0:8848. Another process is already using that port. Stop the existing process, or restart CCCC on a different port. Example: `cccc --port 9000` or `CCCC_WEB_PORT=9000 cccc`.

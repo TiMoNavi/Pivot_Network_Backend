@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pivot Buyer Client</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">Pivot Network</p>
+        <h1>买家本地客户端</h1>
+        <p class="lede">
+          买家购买的不是卖家真实 IP，而是一段由平台按 Docker Swarm 风格编排出来的 runtime bundle 会话。
+        </p>
+      </section>
+
+      <section class="panel">
+        <h2>当前推荐流程</h2>
+        <ol>
+          <li>登录 buyer 账号</li>
+          <li>浏览算力 Offer</li>
+          <li>创建 Order</li>
+          <li>激活订单并申请 runtime bundle</li>
+          <li>使用 gateway / overlay / WireGuard 材料进入 runtime</li>
+        </ol>
+      </section>
+
+      <section class="panel">
+        <h2>正式语义</h2>
+        <ul>
+          <li>Offer = 可售卖的调度模板</li>
+          <li>Order = 一次租用请求</li>
+          <li>AccessGrant = 会话期接入材料</li>
+          <li>Runtime Bundle = runtime service + gateway service + session network</li>
+        </ul>
+      </section>
+
+      <section class="panel muted">
+        <p id="status-line">这个页面当前是本地骨架，核心流程通过 `/local-api/*` 提供。</p>
+      </section>
+    </main>
+    <script src="/static/app.js"></script>
+  </body>
+  </html>

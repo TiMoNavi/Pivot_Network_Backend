@@ -1,0 +1,68 @@
+interface: wg0
+  public key: puGAoUTF0vyha+32vxQ+BBVOWXlCOUzhFoNe5tJ9hyo=
+  private key: (hidden)
+  listening port: 45182
+
+peer: rMNygvLBzvb9rOItprC/BzOSuhZ5Cek0FUade2nTEyo=
+  endpoint: 202.113.184.49:9493
+  allowed ips: 10.66.66.10/32
+  latest handshake: 17 seconds ago
+  transfer: 25.02 KiB received, 52.57 KiB sent
+  persistent keepalive: every 25 seconds
+
+peer: USfEZkXrm2+MqR/tkTR27pI3ACaTHw2zPTYDlNWaI1k=
+  endpoint: 202.113.184.2:6221
+  allowed ips: 10.66.66.2/32
+  latest handshake: 1 hour, 14 minutes, 39 seconds ago
+  transfer: 4.30 MiB received, 12.16 MiB sent
+  persistent keepalive: every 25 seconds
+
+peer: h3vje9bga/c0LOID6d8EbWceB2akp09DMVp+q1SNoX0=
+  endpoint: 202.113.184.42:7280
+  allowed ips: 10.66.66.3/32, 192.168.46.0/24
+  latest handshake: 7 days, 11 hours, 14 minutes, 45 seconds ago
+  transfer: 3.27 MiB received, 22.72 MiB sent
+  persistent keepalive: every 25 seconds
+
+peer: m4vugqibC3uf6Fpgs9PwH8zyN0fUk37r2qyICZ5sBW8=
+  endpoint: 202.113.184.2:6169
+  allowed ips: (none)
+  latest handshake: 10 days, 9 hours, 59 minutes, 4 seconds ago
+  transfer: 752 B received, 20.62 MiB sent
+  persistent keepalive: every 25 seconds
+
+peer: Pi08Snlmxlkit5t3zAB0thpVsE+g7PSN3GdUbD+0DV0=
+  allowed ips: (none)
+  persistent keepalive: every 25 seconds
+
+peer: faDdaQW7ipTBWEovSNr83qZChhQqn1HFRJMY4ijWSRs=
+  allowed ips: 10.66.66.13/32
+  persistent keepalive: every 25 seconds
+
+peer: CIdW6Ysknxy5UnLOWWgVdjT/a4rrsiMjpSmyC7VGoR0=
+  allowed ips: 10.66.66.14/32
+  persistent keepalive: every 25 seconds
+
+peer: GIgtfbUq2v1SFyCe1Rbx95UqNbFhvVLOAYfCiMurKx8=
+  allowed ips: (none)
+  persistent keepalive: every 25 seconds
+
+peer: FOBQvy6pK01+27U9sscgnvGet41rNKP9tbNnxRX1eV0=
+  allowed ips: (none)
+  persistent keepalive: every 25 seconds
+
+peer: 27/aU4MmHTIzcnVP4b++3jteE4rX7M3hWDvPy9cKa1M=
+  allowed ips: 10.66.66.139/32
+  persistent keepalive: every 25 seconds
+
+peer: ODTx9mlL2tAMMCPgqKBOyu+HIeDuwXrMDUDI75J2n2c=
+  allowed ips: 10.66.66.11/32
+  persistent keepalive: every 25 seconds
+
+peer: 41IAUv2ivGYXKm7Ul7JKqQb89D83DTge/bUySOB15n0=
+  allowed ips: 10.66.66.12/32
+  persistent keepalive: every 25 seconds
+
+peer: yt6nIUoE4C3+8ywlH3dVjBkqacwfl3DoE0wcxrAZ6ik=
+  allowed ips: (none)
+  persistent keepalive: every 25 seconds

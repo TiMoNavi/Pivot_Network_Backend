@@ -1,0 +1,9 @@
+ID             NAME                         MODE         REPLICAS   IMAGE                                                       PORTS
+emuodsxi23zg   buyer-runtime-21c22184f393   replicated   0/1        python:3.12-alpine                                          
+nfeqskc6sezz   buyer-runtime-90fedb943513   replicated   0/1        python:3.12-alpine                                          
+qejhsfg9qe0s   buyer-runtime-4451110d28a9   replicated   0/1        python:3.12-alpine                                          
+pyu5h57b5e5o   buyer-runtime-aea8180205c2   replicated   0/1        pivotcompute.store/seller/domain-check-alpine:20260401-v2   
+12a3ok8fpzkz   buyer-runtime-bb7156f5fb8a   replicated   0/1        pivotcompute.store/seller/domain-check-alpine:20260401-v2   
+ibt6lgxy8w7r   buyer-runtime-d5d4053c1e92   replicated   0/1        python:3.12-alpine                                          
+bjqem7bcpzqp   portainer                    replicated   1/1        portainer/portainer-ce:lts                                  *:9443->9443/tcp
+mlj6ta6i7mfv   portainer_agent              global       3/2        portainer/agent:lts                                         

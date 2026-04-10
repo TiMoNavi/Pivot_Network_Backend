@@ -1,0 +1,6 @@
+#!/root/Pivot_network/Docker_Swarm/Docker_Swarm_Adapter/.venv/bin/python
+import sys
+from uvicorn.main import main
+if __name__ == '__main__':
+    sys.argv[0] = sys.argv[0].removesuffix('.exe')
+    sys.exit(main())

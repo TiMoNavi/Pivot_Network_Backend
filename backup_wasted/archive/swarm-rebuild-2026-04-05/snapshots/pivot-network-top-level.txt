@@ -1,0 +1,14 @@
+total 64
+drwxr-xr-x 11 root root  4096 Apr  5 01:53 .
+dr-xr-x--- 19 root root  4096 Apr  5 00:07 ..
+-rw-rw-rw-  1 root root     0 Apr  5 01:44 .codex
+drwxr-xr-x  2 root root  4096 Apr  5 01:44 Backend
+drwxr-xr-x  4 root root  4096 Apr  5 01:53 Docker_Swarm
+drwxr-xr-x  2 root root  4096 Apr  5 01:05 Docker_Swarm_Adapter
+drwxr-xr-x  2 root root  4096 Apr  5 01:45 Frontend
+drwxr-xr-x  2 root root  4096 Apr  5 01:53 Portainer
+drwxr-xr-x  4 root root  4096 Apr  5 02:03 archive
+drwxr-xr-x  2 root root  4096 Apr  5 01:46 buyer-client
+drwxr-xr-x  2 root root  4096 Apr  5 01:46 seller-client
+drwxr-xr-x  4 root root  4096 Apr  5 01:54 wireguard
+-rw-r--r--  1 root root 18118 Apr  5 01:36 任务说明.md

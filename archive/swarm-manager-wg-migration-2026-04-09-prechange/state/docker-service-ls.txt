@@ -1,0 +1,5 @@
+ID             NAME                                           MODE         REPLICAS   IMAGE                        PORTS
+be5odsnlmxuw   gateway-0eb8940e-2b5d-46d2-a1af-873334d8d9ff   replicated   0/1        caddy:2-alpine               
+4hwc4bada3f5   portainer_agent                                global       1/2        portainer/agent:lts          
+kp9r31zo7ras   portainer_portainer                            replicated   1/1        portainer/portainer-ce:lts   *:9443->9443/tcp
+ip88m138mce3   runtime-0eb8940e-2b5d-46d2-a1af-873334d8d9ff   replicated   0/1        managed-runtime-test:local   

@@ -1,0 +1,42 @@
+interface: wg0
+  public key: puGAoUTF0vyha+32vxQ+BBVOWXlCOUzhFoNe5tJ9hyo=
+  private key: (hidden)
+  listening port: 45182
+
+peer: Uj67EAUI9wqsbbsQGvmjwrAYSK+9yhFGEWZWl69qcSo=
+  endpoint: 202.113.184.2:4337
+  allowed ips: 10.66.66.10/32
+  latest handshake: 16 seconds ago
+  transfer: 12.87 MiB received, 79.95 MiB sent
+  persistent keepalive: every 25 seconds
+
+peer: USfEZkXrm2+MqR/tkTR27pI3ACaTHw2zPTYDlNWaI1k=
+  endpoint: 202.113.184.2:5802
+  allowed ips: 10.66.66.2/32
+  latest handshake: 22 hours, 45 minutes, 8 seconds ago
+  transfer: 417.73 KiB received, 5.58 MiB sent
+  persistent keepalive: every 25 seconds
+
+peer: 27/aU4MmHTIzcnVP4b++3jteE4rX7M3hWDvPy9cKa1M=
+  allowed ips: 10.66.66.139/32
+  persistent keepalive: every 25 seconds
+
+peer: 41IAUv2ivGYXKm7Ul7JKqQb89D83DTge/bUySOB15n0=
+  allowed ips: 10.66.66.12/32
+  persistent keepalive: every 25 seconds
+
+peer: faDdaQW7ipTBWEovSNr83qZChhQqn1HFRJMY4ijWSRs=
+  allowed ips: 10.66.66.13/32
+  persistent keepalive: every 25 seconds
+
+peer: h3vje9bga/c0LOID6d8EbWceB2akp09DMVp+q1SNoX0=
+  allowed ips: 10.66.66.3/32, 192.168.46.0/24
+  persistent keepalive: every 25 seconds
+
+peer: ODTx9mlL2tAMMCPgqKBOyu+HIeDuwXrMDUDI75J2n2c=
+  allowed ips: 10.66.66.11/32
+  persistent keepalive: every 25 seconds
+
+peer: qVbmrKce7UIyL/KSJ3KWHN9lJ1HIs2ny9S/0yW5v+CU=
+  allowed ips: 10.66.66.200/32
+  persistent keepalive: every 25 seconds

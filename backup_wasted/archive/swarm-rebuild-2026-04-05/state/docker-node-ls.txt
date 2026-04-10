@@ -1,0 +1,4 @@
+ID                            HOSTNAME             STATUS    AVAILABILITY   MANAGER STATUS   ENGINE VERSION
+pghc2h37yzu88fqge9ckov51s *   VM-0-3-opencloudos   Ready     Active         Leader           26.1.3
+ql6wifxs5vfs2d8ezr884pihx     docker-desktop       Ready     Active                          27.5.1
+y5fuqqquy378dk6matgy5g0ew     docker-desktop       Down      Active                          28.1.1

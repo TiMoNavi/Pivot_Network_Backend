@@ -1,0 +1,21 @@
+{
+  "join_session_id": "join-session-0001",
+  "seller_user_id": "seller-user-0001",
+  "manager_addr": "10.66.66.1",
+  "manager_port": 2377,
+  "swarm_join_command": "docker swarm join --token SWMTKN-1-example 10.66.66.1:2377",
+  "requested_offer_tier": "medium",
+  "requested_accelerator": "gpu",
+  "recommended_compute_node_id": "seller-user-0001-node-01",
+  "expected_swarm_advertise_addr": "10.66.66.11",
+  "expected_wireguard_ip": "10.66.66.11",
+  "required_labels": {
+    "platform.role": "compute",
+    "platform.compute_enabled": "true",
+    "platform.seller_user_id": "seller-user-0001",
+    "platform.compute_node_id": "seller-user-0001-node-01",
+    "platform.accelerator": "gpu"
+  },
+  "registry_host": "pivotcompute.store",
+  "registry_port": 5000
+}

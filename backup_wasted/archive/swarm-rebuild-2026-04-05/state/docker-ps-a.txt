@@ -1,0 +1,4 @@
+CONTAINER ID   IMAGE                        COMMAND                  CREATED       STATUS       PORTS                                       NAMES
+cb5426c48fe7   registry:2                   "/entrypoint.sh /etc…"   10 days ago   Up 10 days   0.0.0.0:5000->5000/tcp, :::5000->5000/tcp   pivot-swarm-registry
+7755f0efee0f   portainer/portainer-ce:lts   "/portainer -H tcp:/…"   11 days ago   Up 11 days   8000/tcp, 9000/tcp, 9443/tcp                portainer.1.ap9l6xaq7fixe7kdf20p6llkk
+51298b59ac95   portainer/agent:lts          "./agent"                11 days ago   Up 11 days                                               portainer_agent.pghc2h37yzu88fqge9ckov51s.q0256qw7d2gduf4xbzoej147h

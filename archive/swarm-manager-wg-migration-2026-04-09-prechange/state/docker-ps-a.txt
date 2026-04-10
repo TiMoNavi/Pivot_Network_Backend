@@ -1,0 +1,10 @@
+CONTAINER ID   IMAGE                        COMMAND                  CREATED        STATUS                    PORTS                                         NAMES
+21150cbbaeb3   portainer/portainer-ce:lts   "/portainer -H tcp:/…"   29 hours ago   Up 29 hours               8000/tcp, 9000/tcp, 9443/tcp                  portainer_portainer.1.jtbw55rqkq6aridrjtvob76jx
+5233f3784996   portainer/agent:lts          "./agent"                29 hours ago   Up 29 hours                                                             portainer_agent.t1p4v4byyo64dyefhd804wlzx.ug04ijkbx5l8wvk1mmmgtnns6
+1be064af43ab   postgres:16-alpine           "docker-entrypoint.s…"   2 days ago     Up 2 days (healthy)       0.0.0.0:55432->5432/tcp, :::55432->5432/tcp   plantform_backend_postgres
+44af849393be   caddy:2-alpine               "caddy reverse-proxy…"   3 days ago     Exited (0) 29 hours ago                                                 gateway-0eb8940e-2b5d-46d2-a1af-873334d8d9ff.1.ul46mjj450mnkz1qsx70nceew
+a3a12eebdcbf   postgres:16-alpine           "docker-entrypoint.s…"   4 days ago     Up 4 days (healthy)       0.0.0.0:5432->5432/tcp, :::5432->5432/tcp     pivot_backend_postgres
+c2971840c726   portainer/portainer-ce:lts   "/portainer -H tcp:/…"   4 days ago     Exited (2) 29 hours ago                                                 portainer_portainer.1.re6scgxrhoj6xb972zw1cb604
+81ed4279b084   portainer/agent:lts          "./agent"                4 days ago     Exited (0) 29 hours ago                                                 portainer_agent.t1p4v4byyo64dyefhd804wlzx.6b73m3sva5vbqn4y1hg903uk6
+95b3468a06a7   portainer/portainer-ce:lts   "/portainer -H tcp:/…"   4 days ago     Exited (2) 4 days ago                                                   portainer_portainer.1.zcvypeaneiblbkzm6ozn35u2x
+7f1b25437ff3   portainer/agent:lts          "./agent"                4 days ago     Exited (2) 4 days ago                                                   portainer_agent.t1p4v4byyo64dyefhd804wlzx.jizcp3wba9cbn3wucj2p3hw3c

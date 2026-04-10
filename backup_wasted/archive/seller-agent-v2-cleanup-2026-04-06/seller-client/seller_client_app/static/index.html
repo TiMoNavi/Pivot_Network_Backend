@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pivot Seller Client</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="hero">
+        <p class="eyebrow">Pivot Network</p>
+        <h1>卖家接入控制台</h1>
+        <p class="lead">
+          从环境检测、加入集群、节点 claim，到规范镜像构建、推送和上报，都在这一页完成。
+        </p>
+      </header>
+
+      <nav class="tab-bar">
+        <button data-tab="login" class="tab is-active">登录</button>
+        <button data-tab="scan" class="tab">环境检测</button>
+        <button data-tab="assistant" class="tab">自然语言助手</button>
+        <button data-tab="join" class="tab">加入与 Claim</button>
+        <button data-tab="image" class="tab">镜像工作台</button>
+        <button data-tab="done" class="tab">完成与日志</button>
+      </nav>
+
+      <section class="panel is-active" data-panel="login">
+        <h2>1. 登录</h2>
+        <div id="login-feedback" class="feedback hidden"></div>
+        <form id="login-form" class="stack">
+          <label>
+            <span>Email</span>
+            <input name="email" type="email" required />
+          </label>
+          <label>
+            <span>Password</span>
+            <input name="password" type="password" required />
+          </label>
+          <button type="submit">登录并获取会话</button>
+        </form>
+        <pre id="login-output" class="output"></pre>
+      </section>
+
+      <section class="panel" data-panel="scan">
+        <h2>2. 环境检测</h2>
+        <div id="scan-feedback" class="feedback hidden"></div>
+        <div class="actions">
+          <button id="start-onboarding">启动卖家接入会话</button>
+          <button id="run-scan">执行环境检测</button>
+        </div>
+        <div id="scan-summary" class="scan-summary"></div>
+        <div id="scan-checks" class="scan-checks"></div>
+        <pre id="scan-output" class="output"></pre>
+      </section>
+
+      <section class="panel" data-panel="assistant">
+        <h2>3. 自然语言助手</h2>
+        <div id="assistant-feedback" class="feedback hidden"></div>
+        <form id="assistant-form" class="stack">
+          <label>
+            <span>给助手的指令</span>
+            <textarea name="message" rows="6" placeholder="例如：先检查我这台 Windows 电脑能不能加入卖家节点，然后告诉我下一步。"></textarea>
+          </label>
+          <button type="submit">提交给 Codex</button>
+        </form>
+        <pre id="assistant-output" class="output"></pre>
+      </section>
+
+      <section class="panel" data-panel="join">
+        <h2>4. 加入与 Claim</h2>
+        <div id="join-feedback" class="feedback hidden"></div>
+        <div class="stack">
+          <button id="run-join">执行 docker swarm join</button>
+          <form id="claim-form" class="stack">
+            <label>
+              <span>Node Ref</span>
+              <input name="node_ref" placeholder="留空时自动读取本机 Swarm NodeID" />
+            </label>
+            <label>
+              <span>Compute Node ID</span>
+              <input name="compute_node_id" placeholder="例如 compute-seller-01" />
+            </label>
+            <label>
+              <span>Requested Accelerator</span>
+              <input name="requested_accelerator" value="gpu" />
+            </label>
+            <button type="submit">Claim 节点</button>
+          </form>
+        </div>
+        <pre id="join-output" class="output"></pre>
+      </section>
+
+      <section class="panel" data-panel="image">
+        <h2>5. 镜像工作台</h2>
+        <div id="image-feedback" class="feedback hidden"></div>
+        <form id="image-build-form" class="stack">
+          <label>
+            <span>Repository</span>
+            <input name="repository" placeholder="pivotcompute/my-seller-runtime" required />
+          </label>
+          <label>
+            <span>Tag</span>
+            <input name="tag" value="latest" required />
+          </label>
+          <label>
+            <span>Registry</span>
+            <input name="registry" value="pivotcompute.store" required />
+          </label>
+          <label>
+            <span>Extra Dockerfile Lines</span>
+            <textarea name="extra_dockerfile_lines" rows="6" placeholder="例如：RUN apt-get update && apt-get install -y git"></textarea>
+          </label>
+          <button type="submit">构建镜像</button>
+        </form>
+
+        <form id="image-push-form" class="stack inline-form">
+          <label>
+            <span>Image Ref</span>
+            <input name="image_ref" placeholder="留空时使用最近一次构建结果" />
+          </label>
+          <button type="submit">推送镜像</button>
+        </form>
+
+        <form id="image-report-form" class="stack">
+          <label>
+            <span>Node Ref</span>
+            <input name="node_ref" required />
+          </label>
+          <label>
+            <span>Runtime Image Ref</span>
+            <input name="runtime_image_ref" required />
+          </label>
+          <label>
+            <span>Repository</span>
+            <input name="repository" required />
+          </label>
+          <label>
+            <span>Tag</span>
+            <input name="tag" required />
+          </label>
+          <label>
+            <span>Registry</span>
+            <input name="registry" value="pivotcompute.store" required />
+          </label>
+          <button type="submit">上报镜像</button>
+        </form>
+        <pre id="image-output" class="output"></pre>
+      </section>
+
+      <section class="panel" data-panel="done">
+        <h2>6. 完成与日志</h2>
+        <div id="state-feedback" class="feedback hidden"></div>
+        <div class="actions">
+          <button id="refresh-state">刷新当前状态</button>
+          <button id="close-onboarding">关闭接入窗口并清理会话</button>
+        </div>
+        <pre id="state-output" class="output"></pre>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

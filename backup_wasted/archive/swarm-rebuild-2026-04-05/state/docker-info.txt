@@ -1,0 +1,86 @@
+Client: Docker Engine - Community
+ Version:    26.1.3
+ Context:    default
+ Debug Mode: true
+ Plugins:
+  buildx: Docker Buildx (Docker Inc.)
+    Version:  v0.14.0
+    Path:     /usr/libexec/docker/cli-plugins/docker-buildx
+  compose: Docker Compose (Docker Inc.)
+    Version:  v2.27.0
+    Path:     /usr/libexec/docker/cli-plugins/docker-compose
+
+Server:
+ Containers: 3
+  Running: 3
+  Paused: 0
+  Stopped: 0
+ Images: 4
+ Server Version: 26.1.3
+ Storage Driver: overlay2
+  Backing Filesystem: extfs
+  Supports d_type: true
+  Using metacopy: false
+  Native Overlay Diff: true
+  userxattr: false
+ Logging Driver: json-file
+ Cgroup Driver: cgroupfs
+ Cgroup Version: 1
+ Plugins:
+  Volume: local
+  Network: bridge host ipvlan macvlan null overlay
+  Log: awslogs fluentd gcplogs gelf journald json-file local splunk syslog
+ Swarm: active
+  NodeID: pghc2h37yzu88fqge9ckov51s
+  Is Manager: true
+  ClusterID: z0g2zwq9umjl6nenfe1oo3235
+  Managers: 1
+  Nodes: 3
+  Data Path Port: 4789
+  Orchestration:
+   Task History Retention Limit: 5
+  Raft:
+   Snapshot Interval: 10000
+   Number of Old Snapshots to Retain: 0
+   Heartbeat Tick: 1
+   Election Tick: 10
+  Dispatcher:
+   Heartbeat Period: 5 seconds
+  CA Configuration:
+   Expiry Duration: 3 months
+   Force Rotate: 0
+  Autolock Managers: false
+  Root Rotation In Progress: false
+  Node Address: 81.70.52.75
+  Manager Addresses:
+   81.70.52.75:2377
+ Runtimes: io.containerd.runc.v2 runc
+ Default Runtime: runc
+ Init Binary: docker-init
+ containerd version: 8b3b7ca2e5ce38e8f31a34f35b2b68ceb8470d89
+ runc version: v1.1.12-0-g51d5e94
+ init version: de40ad0
+ Security Options:
+  seccomp
+   Profile: builtin
+ Kernel Version: 5.4.119-20.0009.29
+ Operating System: OpenCloudOS 8.10
+ OSType: linux
+ Architecture: x86_64
+ CPUs: 2
+ Total Memory: 7.516GiB
+ Name: VM-0-3-opencloudos
+ ID: 5cc77732-9d93-47b3-bf43-3fd5ee217681
+ Docker Root Dir: /var/lib/docker
+ Debug Mode: false
+  File Descriptors: 71
+  Goroutines: 223
+  System Time: 2026-04-05T02:03:43.273301315+08:00
+  EventsListeners: 2
+ Experimental: false
+ Insecure Registries:
+  127.0.0.0/8
+ Registry Mirrors:
+  https://mirror.ccs.tencentyun.com/
+ Live Restore Enabled: false
+

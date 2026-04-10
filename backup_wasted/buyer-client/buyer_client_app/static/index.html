@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pivot Buyer Client</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="hero">
+        <p class="eyebrow">Pivot Network</p>
+        <h1>买家运行时控制台</h1>
+        <p class="lead">登录、下单、兑换、建立 WireGuard、嵌入 shell、同步本地工作区，全部在这一页完成。</p>
+      </header>
+
+      <nav class="tab-bar">
+        <button data-tab="login" class="tab is-active">登录</button>
+        <button data-tab="catalog" class="tab">Catalog / 下单</button>
+        <button data-tab="runtime" class="tab">会话创建</button>
+        <button data-tab="scan" class="tab">环境检查</button>
+        <button data-tab="shell" class="tab">WireGuard + Shell</button>
+        <button data-tab="workspace" class="tab">工作区同步</button>
+      </nav>
+
+      <section class="panel is-active" data-panel="login">
+        <h2>1. 登录</h2>
+        <div id="login-feedback" class="feedback hidden"></div>
+        <form id="login-form" class="stack">
+          <label><span>Email</span><input name="email" type="email" required /></label>
+          <label><span>Password</span><input name="password" type="password" required /></label>
+          <button type="submit">登录</button>
+        </form>
+        <pre id="login-output" class="output"></pre>
+      </section>
+
+      <section class="panel" data-panel="catalog">
+        <h2>2. Catalog / 下单</h2>
+        <div id="catalog-feedback" class="feedback hidden"></div>
+        <div class="actions">
+          <button id="fetch-catalog">拉取可用 Offer</button>
+        </div>
+        <form id="order-form" class="stack">
+          <label><span>Offer ID</span><input name="offer_id" required /></label>
+          <label><span>使用时长（分钟）</span><input name="requested_duration_minutes" value="60" type="number" min="1" max="1440" /></label>
+          <button type="submit">创建订单</button>
+        </form>
+        <form id="redeem-form" class="stack">
+          <label><span>Access Code</span><input name="access_code" required /></label>
+          <button type="submit">兑换 Access Code</button>
+        </form>
+        <pre id="catalog-output" class="output"></pre>
+      </section>
+
+      <section class="panel" data-panel="runtime">
+        <h2>3. 会话创建</h2>
+        <div id="runtime-feedback" class="feedback hidden"></div>
+        <form id="runtime-form" class="stack">
+          <label><span>Redeemed Access Code</span><input name="access_code" required /></label>
+          <button type="submit">创建 Runtime Session</button>
+        </form>
+        <div class="actions">
+          <button id="refresh-runtime">刷新当前 Session</button>
+          <button id="stop-runtime">停止 Runtime Session</button>
+          <button id="close-runtime">关闭本地 Runtime 会话</button>
+        </div>
+        <pre id="runtime-output" class="output"></pre>
+      </section>
+
+      <section class="panel" data-panel="scan">
+        <h2>4. 环境检查</h2>
+        <div id="scan-feedback" class="feedback hidden"></div>
+        <div class="actions">
+          <button id="run-scan">执行环境检测</button>
+        </div>
+        <div id="scan-summary" class="scan-summary"></div>
+        <div id="scan-checks" class="scan-checks"></div>
+        <pre id="scan-output" class="output"></pre>
+      </section>
+
+      <section class="panel" data-panel="shell">
+        <h2>5. WireGuard + Shell</h2>
+        <div id="shell-feedback" class="feedback hidden"></div>
+        <div class="actions">
+          <button id="wireguard-up">启用 WireGuard 隧道</button>
+          <button id="wireguard-down">关闭 WireGuard 隧道</button>
+          <button id="refresh-shell">刷新 Shell 信息</button>
+        </div>
+        <div class="shell-frame-wrap">
+          <iframe id="shell-frame" title="Buyer Runtime Shell"></iframe>
+        </div>
+        <pre id="shell-output" class="output"></pre>
+      </section>
+
+      <section class="panel" data-panel="workspace">
+        <h2>6. 工作区同步</h2>
+        <div id="workspace-feedback" class="feedback hidden"></div>
+        <form id="workspace-form" class="stack">
+          <label><span>本地工作区路径</span><input name="path" placeholder="例如 D:\\AI\\my-project" required /></label>
+          <button type="submit">选择本地工作区</button>
+        </form>
+        <div class="actions">
+          <button id="workspace-sync">同步到 Runtime</button>
+        </div>
+        <form id="assistant-form" class="stack">
+          <label><span>给助手的指令</span><textarea name="message" rows="5" placeholder="例如：帮我检查 WireGuard 是否连通，然后同步当前本地工作区。"></textarea></label>
+          <button type="submit">提交给 CodeX</button>
+        </form>
+        <pre id="workspace-output" class="output"></pre>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
