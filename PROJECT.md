@@ -20,9 +20,9 @@
 
 当前已经不再是：
 
-- `phase3` 末期只验证 seller 商品化的阶段
-- `phase4/phase5` 只做 buyer 实施规格和闭环联调准备的阶段
-- “buyer 仍以文档规格为准、正式实现未落地”的阶段
+- 只做到 seller bootstrap / 商品化验证的中间态
+- 只做到 buyer 规格文档、但正式实现未落地的中间态
+- 需要靠旧阶段 runbook 才能理解当前系统状态的时期
 
 当前也还没有定义新的 `Stage8`。
 
@@ -89,13 +89,14 @@
 
 1. `docs/runbooks/current-project-state-and-execution-guide.md`
 2. `PROJECT.md`
-3. `docs/tutorials/seller-buyer-e2e-guide-cn.md`
-4. `Seller_Client/README.md`
-5. `Buyer_Client/README.md`
-6. `Seller_Client/docs/current-seller-onboarding-flow-cn.md`
-7. `Buyer_Client/docs/current-buyer-purchase-flow-cn.md`
-8. `Plantform_Backend/README.md`
-9. `Docker_Swarm/Docker_Swarm_Adapter/README.md`
+3. `项目名词说明.md`
+4. `docs/tutorials/seller-buyer-e2e-guide-cn.md`
+5. `Seller_Client/README.md`
+6. `Buyer_Client/README.md`
+7. `Seller_Client/docs/current-seller-onboarding-flow-cn.md`
+8. `Buyer_Client/docs/current-buyer-purchase-flow-cn.md`
+9. `Plantform_Backend/README.md`
+10. `Docker_Swarm/Docker_Swarm_Adapter/README.md`
 
 ## 当前活跃范围
 
@@ -103,7 +104,7 @@
 
 - 项目文件夹整理
 - 当前文档更新
-- 过时 runbook 归档 / 清理
+- 过时状态文档 / 证据日志归档 / 清理
 - 新手可直接照做的 seller / buyer 端到端教程
 
 如果后续还要继续推进，不是默认进入新的阶段，而是需要重新定义新的 scope。

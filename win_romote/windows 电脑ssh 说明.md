@@ -8,7 +8,6 @@
 
 如果需要完整执行 seller join / correction / backend 留证链，请继续读：
 
-- `win_romote/windows-seller-join-runbook-cn.md`
 
 - 当前 operator 入口优先使用 **反向 SSH**。这种方式是 Windows 主动连到服务器，比单独依赖 WireGuard 更稳定。
 - `SSH / reverse SSH / WireGuard` 可达，不等于 `Phase 2B` 成功。

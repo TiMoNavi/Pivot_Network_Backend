@@ -89,19 +89,22 @@
 
 1. `docs/tutorials/seller-buyer-e2e-guide-cn.md`
 2. `PROJECT.md`
-3. `Seller_Client/README.md`
-4. `Buyer_Client/README.md`
-5. `Seller_Client/docs/current-seller-onboarding-flow-cn.md`
-6. `Buyer_Client/docs/current-buyer-purchase-flow-cn.md`
+3. `项目名词说明.md`
+4. `Seller_Client/README.md`
+5. `Buyer_Client/README.md`
+6. `Seller_Client/docs/current-seller-onboarding-flow-cn.md`
+7. `Buyer_Client/docs/current-buyer-purchase-flow-cn.md`
 
 ## 7. 当前文档区怎么理解
 
 - `docs/tutorials/`
   - 给新手直接照着做
 - `docs/runbooks/`
-  - 当前有效的项目总览和证据日志
-- `docs/runbooks/archive/`
-  - 旧阶段作战文档与历史 handoff，不再当作当前入口
+  - 只保留当前项目总览与少量协作入口说明
+- `docs/runbooks/archive/legacy-cccc-stage-plans-2026-04-12/`
+  - 旧阶段作战文档与 handoff
+- `docs/runbooks/archive/evidence-logs-2026-04-12/`
+  - Stage1-Stage7 的历史证据日志，不再当作当前入口
 
 ## 8. 当前没有什么
 

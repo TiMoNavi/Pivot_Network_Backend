@@ -15,9 +15,9 @@
 
 - `/root/Pivot_network/docs/tutorials/seller-buyer-e2e-guide-cn.md`
 
-如果你要看历史 `phase4` 实施规格，再读：
+如果你要看历史 `phase4` 实施规格，请去归档目录：
 
-- `Buyer_Client/docs/phase4-buyer-client-implementation-spec-cn.md`
+- `Buyer_Client/docs/archive/legacy-stage-docs-2026-04-12/phase4-buyer-client-implementation-spec-cn.md`
 
 ## 2. 核心结论
 

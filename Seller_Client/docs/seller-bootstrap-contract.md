@@ -1,13 +1,19 @@
-# Seller Client Phase 1 Bootstrap Contract
+# Seller Client Bootstrap Contract
+
+更新时间：`2026-04-12`
+
+这份文档保留 seller bootstrap 这部分仍然有效的契约说明。
+
+它覆盖的是当前 seller onboarding 主线里，仍然由 seller 本地执行、再把事实提交给 backend 的那一段；它不是历史阶段计划，也不是 buyer / order / grant 侧文档。
 
 ## Scope Lock
 
-This surface is locked to `Phase 1` only.
+This surface is locked to the current bootstrap contract only.
 
 - Layers: `Linux Host`, `Linux substrate`, `Container Runtime`
 - Sequence: `detect -> prepare -> install -> repair`
 - Success anchor: `join 后 manager 识别到预期 WireGuard IP`
-- Exclusions: no later-phase order/access flows, no Windows terms
+- Exclusions: no buyer/order/access flows, no Windows product-layer semantics
 
 ## Directory Layout
 
@@ -16,7 +22,7 @@ This surface is locked to `Phase 1` only.
 - `seller_client_app/layers/`
   - per-layer probe points, stage operations, and rollback checkpoints
 - `seller_client_app/bootstrap/`
-  - phase-1 planner, runtime-local `join-complete` payload builder, and flat backend payload exporter
+  - bootstrap planner, runtime-local `join-complete` payload builder, and flat backend payload exporter
 - `bootstrap/`
   - local entrypoint plus example `JoinMaterialEnvelope` input
 - `tests/`
@@ -24,7 +30,7 @@ This surface is locked to `Phase 1` only.
 
 ## Adapter Boundary
 
-Phase 1 keeps the infrastructure control chain fixed:
+This contract keeps the infrastructure control chain fixed:
 
 - `seller client`
   - runs local `detect -> prepare -> install -> repair`
@@ -39,7 +45,7 @@ Phase 1 keeps the infrastructure control chain fixed:
   - provides `join-material`, `inspect`, `claim`, and `wireguard` support
 
 Seller client does not call Adapter directly.
-Phase 1 assumes no Adapter `verify` endpoint and does not add one.
+The current bootstrap contract assumes no Adapter `verify` endpoint and does not add one.
 
 ## Contracts
 
@@ -148,7 +154,6 @@ Stable blocks:
   - machine-id
   - observed addresses
   - required labels
-
 - `node_probe_summary`
   - local `Linux Host` / `Linux substrate` / `Container Runtime` summary
   - rollback checkpoints
@@ -183,7 +188,7 @@ Nested `local_execution / backend_locator` are runtime-local draft blocks, not t
 
 Runtime keeps the nested `NodeProbeSummary` / `JoinCompletePayload` draft locally. The translation boundary in `seller_client_app/bootstrap/backend_payloads.py` is runtime-owned and must map runtime-local facts into the official flat backend ingress.
 
-Current mapping rules are locked for phase 1:
+Current mapping rules are locked for the bootstrap contract:
 
 - `join-complete` backend ingress uses flat fields sourced from `local_execution` and `backend_locator`
 - nested `node_probe_summary` stays runtime-local and can only appear under `raw_payload` provenance
@@ -241,4 +246,4 @@ Current runtime position after lead clarification:
 - flat backend ingress stays separate from the runtime-local nested draft; exporter code owns that translation boundary
 - `reported_phase` is frozen to `detect / prepare / install / repair`
 - `backend_locator` returns `compute_node_id` as the primary stable locator and `node_ref` as optional fallback
-- `ContainerRuntimeProbe` remains a separate schema in phase 1
+- `ContainerRuntimeProbe` remains a separate schema in the bootstrap contract
