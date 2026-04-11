@@ -58,6 +58,7 @@ def get_trade_service(db: Session = Depends(get_db)) -> TradeService:
         download_root=settings.download_root,
         seller_onboarding_repository=SellerOnboardingRepository(db),
         trade_repository=TradeRepository(db),
+        adapter_client=get_adapter_client(),
     )
 
 

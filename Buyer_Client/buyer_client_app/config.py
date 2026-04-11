@@ -25,12 +25,18 @@ class Settings:
     backend_api_prefix: str = "/api/v1"
     windows_workspace_root: str = r"D:\AI\Pivot_Client\buyer_client"
     non_windows_workspace_root: str = "/tmp/pivot_buyer_client"
+    state_subdir_name: str = "state"
     session_subdir_name: str = "sessions"
     logs_subdir_name: str = "logs"
     workspace_subdir_name: str = "workspace"
+    wireguard_subdir_name: str = "wireguard"
+    tasks_subdir_name: str = "tasks"
     window_session_ttl_seconds: int = 90
     heartbeat_interval_seconds: int = 30
     default_requested_duration_minutes: int = 60
+    workspace_archive_name: str = "workspace.zip"
+    wireguard_tunnel_prefix: str = "pivot-buyer"
+    codex_mcp_server_name: str = "buyer-client-tools"
 
     @property
     def workspace_root(self) -> str:
@@ -55,9 +61,15 @@ class Settings:
                 "BUYER_CLIENT_NON_WINDOWS_WORKSPACE_ROOT",
                 defaults.non_windows_workspace_root,
             ),
+            state_subdir_name=os.getenv("BUYER_CLIENT_STATE_SUBDIR_NAME", defaults.state_subdir_name),
             session_subdir_name=os.getenv("BUYER_CLIENT_SESSION_SUBDIR_NAME", defaults.session_subdir_name),
             logs_subdir_name=os.getenv("BUYER_CLIENT_LOGS_SUBDIR_NAME", defaults.logs_subdir_name),
             workspace_subdir_name=os.getenv("BUYER_CLIENT_WORKSPACE_SUBDIR_NAME", defaults.workspace_subdir_name),
+            wireguard_subdir_name=os.getenv(
+                "BUYER_CLIENT_WIREGUARD_SUBDIR_NAME",
+                defaults.wireguard_subdir_name,
+            ),
+            tasks_subdir_name=os.getenv("BUYER_CLIENT_TASKS_SUBDIR_NAME", defaults.tasks_subdir_name),
             window_session_ttl_seconds=_env_int(
                 "BUYER_CLIENT_WINDOW_SESSION_TTL_SECONDS",
                 defaults.window_session_ttl_seconds,
@@ -69,6 +81,15 @@ class Settings:
             default_requested_duration_minutes=_env_int(
                 "BUYER_CLIENT_DEFAULT_REQUESTED_DURATION_MINUTES",
                 defaults.default_requested_duration_minutes,
+            ),
+            workspace_archive_name=os.getenv("BUYER_CLIENT_WORKSPACE_ARCHIVE_NAME", defaults.workspace_archive_name),
+            wireguard_tunnel_prefix=os.getenv(
+                "BUYER_CLIENT_WIREGUARD_TUNNEL_PREFIX",
+                defaults.wireguard_tunnel_prefix,
+            ),
+            codex_mcp_server_name=os.getenv(
+                "BUYER_CLIENT_CODEX_MCP_SERVER_NAME",
+                defaults.codex_mcp_server_name,
             ),
         )
 

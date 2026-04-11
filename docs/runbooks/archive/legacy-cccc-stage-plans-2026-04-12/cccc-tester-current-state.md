@@ -18,7 +18,8 @@
 4. `docs/runbooks/cccc-phase4-workplan.md`
 5. `docs/runbooks/cccc-tester-current-state.md`
 6. `win_romote/windows 电脑ssh 说明.md`
-7. `win_romote/windows_ssh_readme.md`
+7. `win_romote/windows-seller-join-runbook-cn.md`
+8. `win_romote/windows_ssh_readme.md`
 
 ## 2. Windows operator 入口怎么连
 

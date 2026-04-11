@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -8,14 +9,28 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 
+from buyer_client_app.assistant_runtime import execute_assistant_request
 from buyer_client_app.backend import BackendClient, BackendClientError
 from buyer_client_app.config import get_settings
 from buyer_client_app.errors import LocalAppError
 from buyer_client_app.flow import build_runtime_access_plan
+from buyer_client_app.session_ops import (
+    create_runtime_session,
+    import_grant_code,
+    open_shell,
+    read_workspace_status,
+    refresh_active_grants,
+    refresh_runtime_session,
+    submit_task_execution,
+    sync_workspace_selection,
+    tail_task_logs,
+    wireguard_down,
+    wireguard_up,
+)
 from buyer_client_app.state import BuyerClientState
 
 settings = get_settings()
-state = BuyerClientState(settings)
+state = BuyerClientState.load_from_disk(settings)
 app = FastAPI(title="Pivot Buyer Client", version="0.1.0")
 static_dir = Path(__file__).resolve().parent / "static"
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
@@ -44,6 +59,36 @@ class OrderCreateRequest(StrictModel):
 
 class AttachGrantRequest(StrictModel):
     grant_id: str | None = None
+
+
+class GrantCodeImportRequest(StrictModel):
+    grant_code: str = Field(min_length=8)
+
+
+class RuntimeSessionCreateRequest(StrictModel):
+    grant_id: str | None = None
+    grant_code: str | None = None
+    network_mode: str = Field(default="wireguard", min_length=1)
+
+
+class RuntimeSessionRefreshRequest(StrictModel):
+    runtime_session_id: str | None = None
+
+
+class WorkspaceSyncRequest(StrictModel):
+    path: str | None = None
+
+
+class WorkspaceSelectRequest(StrictModel):
+    path: str = Field(min_length=1)
+
+
+class TaskSubmitRequest(StrictModel):
+    command: str = Field(min_length=1)
+
+
+class AssistantMessageRequest(StrictModel):
+    message: str = Field(min_length=1)
 
 
 @app.exception_handler(LocalAppError)
@@ -238,18 +283,13 @@ def activate_order(order_id: str, request: Request) -> dict[str, Any]:
 def active_access_grants(request: Request) -> dict[str, Any]:
     _require_window_session(request)
     client = _require_backend_client()
-    try:
-        response = client.list_active_access_grants()
-    except BackendClientError as exc:
-        raise _backend_error(
-            "access_grants.active",
-            exc,
-            message="Failed to read the buyer's active access grants.",
-            hint="Retry after backend connectivity is restored.",
-        ) from exc
-    items = list(response.get("items") or [])
-    state.set_active_access_grants(items)
-    return {"items": items, "total": response.get("total", len(items))}
+    return refresh_active_grants(state=state, backend_client=client)
+
+
+@app.post("/local-api/access-grants/import-code")
+def local_import_grant_code(payload: GrantCodeImportRequest, request: Request) -> dict[str, Any]:
+    _require_window_session(request)
+    return import_grant_code(state, payload.grant_code)
 
 
 @app.post("/local-api/runtime/attach-active-grant")
@@ -289,7 +329,11 @@ def attach_active_grant(payload: AttachGrantRequest, request: Request) -> dict[s
 @app.get("/local-api/runtime/access-plan")
 def runtime_access_plan(request: Request) -> dict[str, Any]:
     _require_window_session(request)
-    plan = build_runtime_access_plan(state.current_order(), state.current_access_grant())
+    plan = build_runtime_access_plan(
+        state.current_order(),
+        state.current_access_grant(),
+        state.current_runtime_session(),
+    )
     return {"runtime_access_plan": plan}
 
 
@@ -297,6 +341,103 @@ def runtime_access_plan(request: Request) -> dict[str, Any]:
 def runtime_current(request: Request) -> dict[str, Any]:
     _require_window_session(request)
     return state.runtime_snapshot()
+
+
+@app.post("/local-api/runtime-sessions/create")
+def local_create_runtime_session(payload: RuntimeSessionCreateRequest, request: Request) -> dict[str, Any]:
+    _require_window_session(request)
+    client = _require_backend_client()
+    return create_runtime_session(
+        settings=settings,
+        state=state,
+        backend_client=client,
+        grant_id=payload.grant_id,
+        grant_code=payload.grant_code,
+        network_mode=payload.network_mode,
+    )
+
+
+@app.post("/local-api/runtime-sessions/refresh")
+def local_refresh_runtime_session(payload: RuntimeSessionRefreshRequest, request: Request) -> dict[str, Any]:
+    _require_window_session(request)
+    client = _require_backend_client()
+    return refresh_runtime_session(
+        state=state,
+        backend_client=client,
+        runtime_session_id=payload.runtime_session_id,
+    )
+
+
+@app.post("/local-api/wireguard/up")
+def local_wireguard_up(request: Request) -> dict[str, Any]:
+    _require_window_session(request)
+    return wireguard_up(settings=settings, state=state)
+
+
+@app.post("/local-api/wireguard/down")
+def local_wireguard_down(request: Request) -> dict[str, Any]:
+    _require_window_session(request)
+    return wireguard_down(state=state)
+
+
+@app.post("/local-api/runtime-shell/open")
+def local_open_shell(request: Request) -> dict[str, Any]:
+    _require_window_session(request)
+    return open_shell(state)
+
+
+@app.post("/local-api/workspace/select")
+def local_select_workspace(payload: WorkspaceSelectRequest, request: Request) -> dict[str, Any]:
+    _require_window_session(request)
+    state.set_workspace_selection({"path": payload.path, "selected_at": datetime.now(UTC).isoformat()})
+    return {"workspace_selection": state.current_workspace_selection()}
+
+
+@app.post("/local-api/workspace/sync")
+def local_sync_workspace(payload: WorkspaceSyncRequest, request: Request) -> dict[str, Any]:
+    _require_window_session(request)
+    return sync_workspace_selection(
+        settings=settings,
+        state=state,
+        source_path=payload.path,
+    )
+
+
+@app.get("/local-api/workspace/status")
+def local_workspace_status(request: Request) -> dict[str, Any]:
+    _require_window_session(request)
+    return read_workspace_status(state)
+
+
+@app.post("/local-api/tasks/submit")
+def local_submit_task(payload: TaskSubmitRequest, request: Request) -> dict[str, Any]:
+    _require_window_session(request)
+    return submit_task_execution(state=state, command=payload.command)
+
+
+@app.get("/local-api/tasks/history")
+def local_task_history(request: Request) -> dict[str, Any]:
+    _require_window_session(request)
+    items = state.task_execution_history()
+    return {"items": items, "total": len(items)}
+
+
+@app.get("/local-api/tasks/{task_id}/logs")
+def local_task_logs(task_id: str, request: Request, max_chars: int = 4000) -> dict[str, Any]:
+    _require_window_session(request)
+    return tail_task_logs(state=state, task_id=task_id, max_chars=max_chars)
+
+
+@app.post("/local-api/assistant/message")
+def local_assistant_message(payload: AssistantMessageRequest, request: Request) -> dict[str, Any]:
+    _require_window_session(request)
+    result = execute_assistant_request(
+        settings=settings,
+        state=state,
+        user_message=payload.message,
+    )
+    state.refresh_from_disk()
+    return result
 
 
 def _require_window_session(request: Request) -> dict[str, Any]:

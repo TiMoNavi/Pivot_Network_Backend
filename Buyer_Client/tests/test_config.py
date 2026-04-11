@@ -40,6 +40,11 @@ class SettingsTests(unittest.TestCase):
         self.assertEqual(settings.heartbeat_interval_seconds, 30)
         self.assertEqual(settings.default_requested_duration_minutes, 60)
 
+    def test_workspace_root_uses_windows_root_on_windows(self) -> None:
+        settings = Settings(windows_workspace_root=r"D:\AI\Pivot_Client\buyer_client")
+        with patch("buyer_client_app.config.platform.system", return_value="Windows"):
+            self.assertEqual(settings.workspace_root, r"D:\AI\Pivot_Client\buyer_client")
+
 
 if __name__ == "__main__":
     unittest.main()

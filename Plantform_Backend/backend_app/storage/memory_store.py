@@ -78,6 +78,33 @@ class AccessGrantRecord:
 
 
 @dataclass
+class RuntimeSessionRecord:
+    id: str
+    access_grant_id: str
+    order_id: str
+    offer_id: str
+    buyer_user_id: str
+    seller_user_id: str | None
+    compute_node_id: str | None
+    source_join_session_id: str | None
+    status: str
+    runtime_bundle_status: str
+    network_mode: str
+    buyer_wireguard_public_key: str
+    runtime_service_name: str | None
+    gateway_service_name: str | None
+    network_name: str | None
+    connect_metadata: dict[str, Any]
+    wireguard_lease_metadata: dict[str, Any]
+    recent_error_summary: list[str]
+    created_at: datetime
+    updated_at: datetime
+    expires_at: datetime
+    last_heartbeat_at: datetime | None
+    closed_at: datetime | None
+
+
+@dataclass
 class SellerCapabilityAssessmentRecord:
     id: str
     seller_user_id: str
@@ -274,6 +301,7 @@ class InMemoryStore:
     capability_assessments: dict[str, SellerCapabilityAssessmentRecord] = field(default_factory=dict)
     orders: dict[str, OrderRecord] = field(default_factory=dict)
     access_grants: dict[str, AccessGrantRecord] = field(default_factory=dict)
+    runtime_sessions: dict[str, RuntimeSessionRecord] = field(default_factory=dict)
     join_sessions: dict[str, JoinSessionRecord] = field(default_factory=dict)
     linux_host_probes_by_session_id: dict[str, LinuxHostProbeRecord] = field(default_factory=dict)
     linux_substrate_probes_by_session_id: dict[str, LinuxSubstrateProbeRecord] = field(default_factory=dict)

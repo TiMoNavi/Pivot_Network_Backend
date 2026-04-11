@@ -32,6 +32,18 @@ class OrderCreateRequest(BaseModel):
     requested_duration_minutes: int = Field(ge=1, le=24 * 60)
 
 
+class AccessGrantRedeemRequest(BaseModel):
+    grant_id: str
+    wireguard_public_key: str = Field(min_length=8, max_length=1024)
+    network_mode: str = Field(default="wireguard", min_length=1, max_length=32)
+
+
+class AccessGrantRedeemByCodeRequest(BaseModel):
+    grant_code: str = Field(min_length=8, max_length=1024)
+    wireguard_public_key: str = Field(min_length=8, max_length=1024)
+    network_mode: str = Field(default="wireguard", min_length=1, max_length=32)
+
+
 class OrderRead(BaseModel):
     id: str
     buyer_user_id: str
@@ -47,6 +59,8 @@ class OrderRead(BaseModel):
 
 class AccessGrantRead(BaseModel):
     id: str
+    grant_id: str
+    grant_code: str
     buyer_user_id: str
     order_id: str
     runtime_session_id: str | None = None
@@ -67,3 +81,28 @@ class OrderActivationRead(BaseModel):
 class AccessGrantListRead(BaseModel):
     items: list[AccessGrantRead] = Field(default_factory=list)
     total: int
+
+
+class RuntimeSessionRead(BaseModel):
+    id: str
+    access_grant_id: str
+    order_id: str
+    offer_id: str
+    buyer_user_id: str
+    seller_user_id: str | None = None
+    compute_node_id: str | None = None
+    source_join_session_id: str | None = None
+    status: str
+    runtime_bundle_status: str
+    network_mode: str
+    runtime_service_name: str | None = None
+    gateway_service_name: str | None = None
+    network_name: str | None = None
+    connect_metadata: dict[str, Any] = Field(default_factory=dict)
+    wireguard_lease_metadata: dict[str, Any] = Field(default_factory=dict)
+    recent_error_summary: list[str] = Field(default_factory=list)
+    expires_at: datetime
+    created_at: datetime
+    updated_at: datetime
+    last_heartbeat_at: datetime | None = None
+    closed_at: datetime | None = None

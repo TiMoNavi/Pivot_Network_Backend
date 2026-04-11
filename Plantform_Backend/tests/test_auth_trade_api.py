@@ -14,11 +14,13 @@ from backend_app.services.auth_service import AuthService
 from backend_app.services.file_service import FileService
 from backend_app.services.trade_service import TradeService
 from backend_app.storage.memory_store import (
+    AccessGrantRecord,
     AuthoritativeEffectiveTargetRecord,
     InMemoryStore,
     JoinSessionRecord,
     ManagerAcceptanceRecord,
     ManagerAddressOverrideRecord,
+    OrderRecord,
     MinimumTcpValidationRecord,
 )
 
@@ -79,6 +81,12 @@ def test_auth_offer_order_and_access_grant_flow(tmp_path: Path) -> None:
     activation_payload = activation.json()
     grant = activation_payload["access_grant"]
     assert grant["status"] == "issued"
+    assert grant["grant_id"] == grant["id"]
+    assert grant["grant_code"]
+    assert grant["expires_at"]
+    assert grant["connect_material_payload"]["grant_id"] == grant["id"]
+    assert grant["connect_material_payload"]["grant_code"] == grant["grant_code"]
+    assert grant["connect_material_payload"]["expires_at"] == grant["expires_at"]
     download_relative_path = grant["connect_material_payload"]["download_relative_path"]
 
     grants = client.get("/api/v1/me/access-grants/active", headers=headers)
@@ -472,4 +480,85 @@ def test_access_grant_can_read_effective_target_from_database_backed_onboarding(
         assert payload["minimum_tcp_validation"]["validated_against_effective_target"] is True
     finally:
         db_session.close()
+        app.dependency_overrides.clear()
+
+
+def test_existing_access_grant_without_grant_code_is_backfilled_on_read(tmp_path: Path) -> None:
+    downloads = tmp_path / "downloads"
+    downloads.mkdir(parents=True, exist_ok=True)
+    store = InMemoryStore()
+    auth_service = AuthService(store)
+    trade_service = TradeService(store, download_root=downloads)
+    file_service = FileService(downloads)
+
+    app.dependency_overrides[get_auth_service] = lambda: auth_service
+    app.dependency_overrides[get_trade_service] = lambda: trade_service
+    app.dependency_overrides[get_file_service] = lambda: file_service
+
+    client = TestClient(app)
+    try:
+        register = client.post(
+            "/api/v1/auth/register",
+            json={
+                "email": "buyer-legacy-grant@example.com",
+                "display_name": "Buyer Legacy",
+                "password": "password123",
+                "role": "buyer",
+            },
+        )
+        assert register.status_code == 201, register.text
+        token = register.json()["access_token"]
+        buyer_user_id = register.json()["user"]["id"]
+        headers = {"Authorization": f"Bearer {token}"}
+
+        now = datetime.now(UTC)
+        store.orders["order_legacy_1"] = OrderRecord(
+            id="order_legacy_1",
+            buyer_user_id=buyer_user_id,
+            offer_id="offer_legacy_1",
+            status="grant_issued",
+            requested_duration_minutes=60,
+            price_snapshot={"currency": "CNY", "hourly_price": 12.5},
+            runtime_bundle_status="placeholder_pending",
+            access_grant_id="grant_legacy_1",
+            created_at=now,
+            updated_at=now,
+        )
+        store.access_grants["grant_legacy_1"] = AccessGrantRecord(
+            id="grant_legacy_1",
+            buyer_user_id=buyer_user_id,
+            order_id="order_legacy_1",
+            runtime_session_id="placeholder-runtime-legacy",
+            status="issued",
+            grant_type="placeholder",
+            connect_material_payload={
+                "grant_mode": "placeholder",
+                "download_relative_path": "generated/access-grants/grant_legacy_1.json",
+            },
+            issued_at=now,
+            expires_at=now + timedelta(hours=12),
+            activated_at=None,
+            revoked_at=None,
+        )
+
+        activation = client.post("/api/v1/orders/order_legacy_1/activate", headers=headers)
+        assert activation.status_code == 200, activation.text
+        grant = activation.json()["access_grant"]
+        assert grant["grant_id"] == "grant_legacy_1"
+        assert grant["grant_code"]
+        assert grant["connect_material_payload"]["grant_id"] == "grant_legacy_1"
+        assert grant["connect_material_payload"]["grant_code"] == grant["grant_code"]
+        assert grant["connect_material_payload"]["expires_at"] == grant["expires_at"]
+
+        grants = client.get("/api/v1/me/access-grants/active", headers=headers)
+        assert grants.status_code == 200, grants.text
+        listed_grant = grants.json()["items"][0]
+        assert listed_grant["grant_id"] == "grant_legacy_1"
+        assert listed_grant["grant_code"] == grant["grant_code"]
+
+        artifact = client.get("/api/v1/files/download/generated/access-grants/grant_legacy_1.json")
+        assert artifact.status_code == 200, artifact.text
+        assert "grant_code" in artifact.text
+        assert "grant_legacy_1" in artifact.text
+    finally:
         app.dependency_overrides.clear()

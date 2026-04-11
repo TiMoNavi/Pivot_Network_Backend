@@ -5,11 +5,18 @@ from datetime import UTC, datetime
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from backend_app.db.models.auth_trade import AccessGrantModel, OfferModel, OrderModel, SellerCapabilityAssessmentModel
+from backend_app.db.models.auth_trade import (
+    AccessGrantModel,
+    OfferModel,
+    OrderModel,
+    RuntimeSessionModel,
+    SellerCapabilityAssessmentModel,
+)
 from backend_app.storage.memory_store import (
     AccessGrantRecord,
     OfferRecord,
     OrderRecord,
+    RuntimeSessionRecord,
     SellerCapabilityAssessmentRecord,
 )
 
@@ -176,6 +183,14 @@ class TradeRepository:
             return None
         return self._grant_record(model)
 
+    def get_access_grant_by_code(self, grant_code: str) -> AccessGrantRecord | None:
+        statement = select(AccessGrantModel).order_by(AccessGrantModel.issued_at.desc())
+        for model in self.session.scalars(statement):
+            payload = dict(model.connect_material_payload or {})
+            if str(payload.get("grant_code") or "") == grant_code:
+                return self._grant_record(model)
+        return None
+
     def save_access_grant(self, record: AccessGrantRecord) -> AccessGrantRecord:
         model = self.session.get(AccessGrantModel, record.id)
         if model is None:
@@ -201,11 +216,54 @@ class TradeRepository:
                 AccessGrantModel.buyer_user_id == buyer_user_id,
                 AccessGrantModel.revoked_at.is_(None),
                 AccessGrantModel.expires_at > now,
-                AccessGrantModel.status.in_(("issued", "active")),
+                AccessGrantModel.status.in_(("issued", "active", "redeemed")),
             )
             .order_by(AccessGrantModel.issued_at.desc())
         )
         return [self._grant_record(model) for model in self.session.scalars(statement)]
+
+    def get_runtime_session(self, runtime_session_id: str) -> RuntimeSessionRecord | None:
+        model = self.session.get(RuntimeSessionModel, runtime_session_id)
+        if model is None:
+            return None
+        return self._runtime_session_record(model)
+
+    def get_runtime_session_by_access_grant_id(self, access_grant_id: str) -> RuntimeSessionRecord | None:
+        statement = select(RuntimeSessionModel).where(RuntimeSessionModel.access_grant_id == access_grant_id)
+        model = self.session.scalar(statement)
+        if model is None:
+            return None
+        return self._runtime_session_record(model)
+
+    def save_runtime_session(self, record: RuntimeSessionRecord) -> RuntimeSessionRecord:
+        model = self.session.get(RuntimeSessionModel, record.id)
+        if model is None:
+            model = RuntimeSessionModel(id=record.id)
+            self.session.add(model)
+        model.access_grant_id = record.access_grant_id
+        model.order_id = record.order_id
+        model.offer_id = record.offer_id
+        model.buyer_user_id = record.buyer_user_id
+        model.seller_user_id = record.seller_user_id
+        model.compute_node_id = record.compute_node_id
+        model.source_join_session_id = record.source_join_session_id
+        model.status = record.status
+        model.runtime_bundle_status = record.runtime_bundle_status
+        model.network_mode = record.network_mode
+        model.buyer_wireguard_public_key = record.buyer_wireguard_public_key
+        model.runtime_service_name = record.runtime_service_name
+        model.gateway_service_name = record.gateway_service_name
+        model.network_name = record.network_name
+        model.connect_metadata = dict(record.connect_metadata)
+        model.wireguard_lease_metadata = dict(record.wireguard_lease_metadata)
+        model.recent_error_summary = list(record.recent_error_summary)
+        model.created_at = self._ensure_utc_datetime(record.created_at)
+        model.updated_at = self._ensure_utc_datetime(record.updated_at)
+        model.expires_at = self._ensure_utc_datetime(record.expires_at)
+        model.last_heartbeat_at = self._ensure_utc_datetime(record.last_heartbeat_at)
+        model.closed_at = self._ensure_utc_datetime(record.closed_at)
+        self.session.flush()
+        return self._runtime_session_record(model)
 
     @staticmethod
     def _offer_record(model: OfferModel) -> OfferRecord:
@@ -280,6 +338,34 @@ class TradeRepository:
             expires_at=TradeRepository._ensure_utc_datetime(model.expires_at),
             activated_at=TradeRepository._ensure_utc_datetime(model.activated_at),
             revoked_at=TradeRepository._ensure_utc_datetime(model.revoked_at),
+        )
+
+    @staticmethod
+    def _runtime_session_record(model: RuntimeSessionModel) -> RuntimeSessionRecord:
+        return RuntimeSessionRecord(
+            id=model.id,
+            access_grant_id=model.access_grant_id,
+            order_id=model.order_id,
+            offer_id=model.offer_id,
+            buyer_user_id=model.buyer_user_id,
+            seller_user_id=model.seller_user_id,
+            compute_node_id=model.compute_node_id,
+            source_join_session_id=model.source_join_session_id,
+            status=model.status,
+            runtime_bundle_status=model.runtime_bundle_status,
+            network_mode=model.network_mode,
+            buyer_wireguard_public_key=model.buyer_wireguard_public_key,
+            runtime_service_name=model.runtime_service_name,
+            gateway_service_name=model.gateway_service_name,
+            network_name=model.network_name,
+            connect_metadata=dict(model.connect_metadata or {}),
+            wireguard_lease_metadata=dict(model.wireguard_lease_metadata or {}),
+            recent_error_summary=list(model.recent_error_summary or []),
+            created_at=TradeRepository._ensure_utc_datetime(model.created_at),
+            updated_at=TradeRepository._ensure_utc_datetime(model.updated_at),
+            expires_at=TradeRepository._ensure_utc_datetime(model.expires_at),
+            last_heartbeat_at=TradeRepository._ensure_utc_datetime(model.last_heartbeat_at),
+            closed_at=TradeRepository._ensure_utc_datetime(model.closed_at),
         )
 
     @staticmethod

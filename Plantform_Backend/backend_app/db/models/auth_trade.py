@@ -126,3 +126,36 @@ class AccessGrantModel(Base):
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
     activated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class RuntimeSessionModel(Base):
+    __tablename__ = "runtime_sessions"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    access_grant_id: Mapped[str] = mapped_column(String(64), nullable=False, unique=True, index=True)
+    order_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    offer_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    buyer_user_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    seller_user_id: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
+    compute_node_id: Mapped[str | None] = mapped_column(String(128), nullable=True, index=True)
+    source_join_session_id: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
+    status: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    runtime_bundle_status: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    network_mode: Mapped[str] = mapped_column(String(32), nullable=False)
+    buyer_wireguard_public_key: Mapped[str] = mapped_column(Text, nullable=False)
+    runtime_service_name: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    gateway_service_name: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    network_name: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    connect_metadata: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    wireguard_lease_metadata: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    recent_error_summary: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=_utc_now)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=_utc_now,
+        onupdate=_utc_now,
+    )
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
+    last_heartbeat_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True, index=True)
+    closed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True, index=True)

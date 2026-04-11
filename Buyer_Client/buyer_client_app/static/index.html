@@ -12,35 +12,76 @@
         <p class="eyebrow">Pivot Network</p>
         <h1>买家本地客户端</h1>
         <p class="lede">
-          买家购买的不是卖家真实 IP，而是一段由平台按 Docker Swarm 风格编排出来的 runtime bundle 会话。
+          Linux-first 的网页自然语言入口会在这里驱动同一条 Buyer_Client + MCP + runtime bundle 链路，而不是绕开当前真实 Buyer / Trade / Docker Swarm 会话路径。
         </p>
       </section>
 
       <section class="panel">
-        <h2>当前推荐流程</h2>
-        <ol>
-          <li>登录 buyer 账号</li>
-          <li>浏览算力 Offer</li>
-          <li>创建 Order</li>
-          <li>激活订单并申请 runtime bundle</li>
-          <li>使用 gateway / overlay / WireGuard 材料进入 runtime</li>
-        </ol>
+        <h2>Stage5 Web Trigger</h2>
+        <p>
+          当前目标是把网页里的自然语言请求串到同一条真实 buyer/runtime-session 链上：
+          grant 选择或导入、session create/refresh、WireGuard up、shell open、workspace sync、task submit 和 result readback。
+        </p>
+        <p id="status-line" class="muted">正在初始化本地浏览器会话。</p>
       </section>
 
       <section class="panel">
-        <h2>正式语义</h2>
-        <ul>
-          <li>Offer = 可售卖的调度模板</li>
-          <li>Order = 一次租用请求</li>
-          <li>AccessGrant = 会话期接入材料</li>
-          <li>Runtime Bundle = runtime service + gateway service + session network</li>
-        </ul>
+        <h2>登录与当前链路</h2>
+        <form id="login-form">
+          <p><label>Email<br><input id="login-email" name="email" type="email" required></label></p>
+          <p><label>Password<br><input id="login-password" name="password" type="password" required></label></p>
+          <p><button type="submit">登录 Buyer</button></p>
+        </form>
+
+        <p>
+          <button id="refresh-state" type="button">刷新当前状态</button>
+          <button id="fetch-offers" type="button">拉取 Offer</button>
+          <button id="fetch-grants" type="button">拉取 Active Grants</button>
+          <button id="attach-grant" type="button">绑定首个 Active Grant</button>
+        </p>
+
+        <pre id="state-output">等待本地状态。</pre>
       </section>
 
-      <section class="panel muted">
-        <p id="status-line">这个页面当前是本地骨架，核心流程通过 `/local-api/*` 提供。</p>
+      <section class="panel">
+        <h2>Grant 与工作区</h2>
+        <p><label>Grant Code（可选）<br><input id="grant-code" type="text" placeholder="如需手工导入 grant_code，可填这里"></label></p>
+        <p><button id="import-grant" type="button">导入 Grant Code</button></p>
+
+        <p><label>Workspace 路径<br><input id="workspace-path" type="text" placeholder="/root/Pivot_network"></label></p>
+        <p>
+          <button id="save-workspace" type="button">保存工作区路径</button>
+          <button id="sync-workspace" type="button">手动同步工作区</button>
+        </p>
+      </section>
+
+      <section class="panel">
+        <h2>自然语言驱动</h2>
+        <p>
+          示例：
+          <code>使用当前 active grant 建立 runtime session，拉起 WireGuard，打开 shell，同步 D:\AI\Pivot_Client\buyer_client，执行 `pwd` 并返回结果。</code>
+        </p>
+        <p><label>Prompt<br><textarea id="assistant-message" rows="7" placeholder="描述你希望 Buyer_Client 在当前真实链路上完成的动作，例如同步 D:\AI\Pivot_Client\buyer_client 并执行任务。"></textarea></label></p>
+        <p>
+          <button id="run-assistant" type="button">执行自然语言流程</button>
+          <button id="create-session" type="button">手动创建 / 刷新 Session</button>
+          <button id="wireguard-up" type="button">手动拉起 WireGuard</button>
+          <button id="open-shell" type="button">手动打开 Shell</button>
+        </p>
+
+        <pre id="assistant-output">等待自然语言触发。</pre>
+      </section>
+
+      <section class="panel">
+        <h2>Shell 与任务结果</h2>
+        <iframe
+          id="shell-frame"
+          title="Buyer Runtime Shell"
+          style="width:100%;min-height:420px;border:1px solid rgba(20,33,61,0.12);border-radius:14px;background:#fff;"
+        ></iframe>
+        <pre id="task-output">等待 shell / workspace / task 结果。</pre>
       </section>
     </main>
     <script src="/static/app.js"></script>
   </body>
-  </html>
+</html>

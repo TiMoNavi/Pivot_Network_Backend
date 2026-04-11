@@ -79,6 +79,44 @@ class BackendClient:
     def list_active_access_grants(self) -> dict[str, Any]:
         return self._request("GET", f"{self.settings.backend_api_prefix}/me/access-grants/active")
 
+    def redeem_access_grant(
+        self,
+        grant_id: str,
+        wireguard_public_key: str,
+        network_mode: str = "wireguard",
+    ) -> dict[str, Any]:
+        return self._request(
+            "POST",
+            f"{self.settings.backend_api_prefix}/access-grants/redeem",
+            json={
+                "grant_id": grant_id,
+                "wireguard_public_key": wireguard_public_key,
+                "network_mode": network_mode,
+            },
+        )
+
+    def redeem_access_grant_by_code(
+        self,
+        grant_code: str,
+        wireguard_public_key: str,
+        network_mode: str = "wireguard",
+    ) -> dict[str, Any]:
+        return self._request(
+            "POST",
+            f"{self.settings.backend_api_prefix}/access-grants/redeem-by-code",
+            json={
+                "grant_code": grant_code,
+                "wireguard_public_key": wireguard_public_key,
+                "network_mode": network_mode,
+            },
+        )
+
+    def get_runtime_session(self, runtime_session_id: str) -> dict[str, Any]:
+        return self._request(
+            "GET",
+            f"{self.settings.backend_api_prefix}/runtime-sessions/{runtime_session_id}",
+        )
+
     def _request(
         self,
         method: str,

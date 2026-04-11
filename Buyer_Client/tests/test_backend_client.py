@@ -34,6 +34,9 @@ class BackendClientTests(unittest.TestCase):
         client.get_order("order-1")
         client.activate_order("order-1")
         client.list_active_access_grants()
+        client.redeem_access_grant("grant-1", "buyer-pub-key")
+        client.redeem_access_grant_by_code("grant-code-1", "buyer-pub-key")
+        client.get_runtime_session("runtime-1")
 
         self.assertEqual(
             captured,
@@ -44,6 +47,9 @@ class BackendClientTests(unittest.TestCase):
                 ("GET", "/api/v1/orders/order-1"),
                 ("POST", "/api/v1/orders/order-1/activate"),
                 ("GET", "/api/v1/me/access-grants/active"),
+                ("POST", "/api/v1/access-grants/redeem"),
+                ("POST", "/api/v1/access-grants/redeem-by-code"),
+                ("GET", "/api/v1/runtime-sessions/runtime-1"),
             ],
         )
 

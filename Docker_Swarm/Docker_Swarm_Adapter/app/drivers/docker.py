@@ -94,6 +94,7 @@ class DockerDriver:
         published_port: int | None = None,
         target_port: int | None = None,
         publish_mode: str = "ingress",
+        restart_condition: str = "none",
     ) -> dict[str, Any]:
         command = [
             "docker",
@@ -103,7 +104,7 @@ class DockerDriver:
             "--name",
             name,
             "--restart-condition",
-            "none",
+            restart_condition,
             "--no-resolve-image",
         ]
         for key, value in (labels or {}).items():

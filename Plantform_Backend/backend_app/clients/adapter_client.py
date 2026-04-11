@@ -144,6 +144,30 @@ class AdapterClient:
             auth_required=True,
         )
 
+    def create_runtime_session_bundle(self, payload: dict[str, Any]) -> dict[str, Any]:
+        return self._request(
+            "POST",
+            "/swarm/runtime-session-bundles/create",
+            json=payload,
+            auth_required=True,
+        )
+
+    def inspect_runtime_session_bundle(self, payload: dict[str, Any]) -> dict[str, Any]:
+        return self._request(
+            "POST",
+            "/swarm/runtime-session-bundles/inspect",
+            json=payload,
+            auth_required=True,
+        )
+
+    def remove_runtime_session_bundle(self, payload: dict[str, Any]) -> dict[str, Any]:
+        return self._request(
+            "POST",
+            "/swarm/runtime-session-bundles/remove",
+            json=payload,
+            auth_required=True,
+        )
+
     def _request(
         self,
         method: str,

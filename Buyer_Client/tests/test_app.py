@@ -33,6 +33,7 @@ class BuyerAppTests(unittest.TestCase):
         self.assertIn("买家本地客户端", response.text)
         self.assertIn("Docker Swarm", response.text)
         self.assertIn("runtime bundle", response.text)
+        self.assertIn("自然语言", response.text)
 
     def test_login_order_activate_flow_uses_runtime_bundle_semantics(self) -> None:
         headers = self._window_headers()
@@ -143,6 +144,149 @@ class BuyerAppTests(unittest.TestCase):
             current = self.client.get("/local-api/runtime/current", headers=headers)
             self.assertEqual(current.status_code, 200, current.text)
             self.assertEqual(current.json()["current_access_grant"]["id"], "grant-1")
+
+    def test_stage4_runtime_routes_are_wired(self) -> None:
+        headers = self._window_headers()
+        login_payload = {
+            "access_token": "token-1",
+            "expires_at": "2026-04-11T00:00:00Z",
+            "user": {
+                "id": "buyer-1",
+                "email": "buyer@example.com",
+                "display_name": "Buyer One",
+                "role": "buyer",
+                "status": "active",
+                "created_at": "2026-04-10T00:00:00Z",
+                "updated_at": "2026-04-10T00:00:00Z",
+            },
+        }
+        runtime_session_payload = {
+            "runtime_session": {
+                "id": "runtime-1",
+                "status": "ready",
+                "runtime_bundle_status": "running",
+            },
+            "runtime_access_plan": {
+                "runtime_session_id": "runtime-1",
+                "network_entry": {
+                    "shell_embed_url": "http://10.66.66.1:32080/shell/runtime-1",
+                    "workspace_status_url": "http://10.66.66.1:32080/api/workspace/status",
+                },
+            },
+        }
+
+        with (
+            patch("buyer_client_app.main.BackendClient.login", return_value=login_payload),
+            patch("buyer_client_app.main.create_runtime_session", return_value=runtime_session_payload),
+            patch("buyer_client_app.main.refresh_runtime_session", return_value=runtime_session_payload),
+            patch(
+                "buyer_client_app.main.wireguard_up",
+                return_value={"status": "up", "interface_name": "pivot-buyer-runtime-1"},
+            ),
+            patch(
+                "buyer_client_app.main.wireguard_down",
+                return_value={"status": "down", "interface_name": "pivot-buyer-runtime-1"},
+            ),
+            patch(
+                "buyer_client_app.main.open_shell",
+                return_value={"shell_embed_url": "http://10.66.66.1:32080/shell/runtime-1"},
+            ),
+            patch(
+                "buyer_client_app.main.sync_workspace_selection",
+                return_value={"workspace_selection": {"path": "/tmp/workspace"}, "status": {"files": []}},
+            ),
+            patch(
+                "buyer_client_app.main.read_workspace_status",
+                return_value={"workspace_root": "/workspace", "files": [{"path": "README.md"}]},
+            ),
+            patch(
+                "buyer_client_app.main.submit_task_execution",
+                return_value={"id": "task-1", "status": "succeeded", "exit_code": 0},
+            ),
+            patch(
+                "buyer_client_app.main.tail_task_logs",
+                return_value={"task_id": "task-1", "stdout_tail": "ok", "stderr_tail": ""},
+            ),
+        ):
+            login = self.client.post(
+                "/local-api/auth/login",
+                json={"email": "buyer@example.com", "password": "password123"},
+            )
+            self.assertEqual(login.status_code, 200, login.text)
+
+            imported = self.client.post(
+                "/local-api/access-grants/import-code",
+                headers=headers,
+                json={"grant_code": "grant-code-12345678"},
+            )
+            self.assertEqual(imported.status_code, 200, imported.text)
+            self.assertEqual(imported.json()["status"], "imported")
+
+            created = self.client.post(
+                "/local-api/runtime-sessions/create",
+                headers=headers,
+                json={"grant_code": "grant-code-12345678"},
+            )
+            self.assertEqual(created.status_code, 200, created.text)
+            self.assertEqual(created.json()["runtime_session"]["id"], "runtime-1")
+
+            refreshed = self.client.post(
+                "/local-api/runtime-sessions/refresh",
+                headers=headers,
+                json={"runtime_session_id": "runtime-1"},
+            )
+            self.assertEqual(refreshed.status_code, 200, refreshed.text)
+
+            wg_up = self.client.post("/local-api/wireguard/up", headers=headers)
+            self.assertEqual(wg_up.status_code, 200, wg_up.text)
+            self.assertEqual(wg_up.json()["status"], "up")
+
+            shell = self.client.post("/local-api/runtime-shell/open", headers=headers)
+            self.assertEqual(shell.status_code, 200, shell.text)
+            self.assertIn("/shell/runtime-1", shell.json()["shell_embed_url"])
+
+            synced = self.client.post(
+                "/local-api/workspace/sync",
+                headers=headers,
+                json={"path": "/tmp/workspace"},
+            )
+            self.assertEqual(synced.status_code, 200, synced.text)
+
+            workspace_status = self.client.get("/local-api/workspace/status", headers=headers)
+            self.assertEqual(workspace_status.status_code, 200, workspace_status.text)
+            self.assertEqual(workspace_status.json()["workspace_root"], "/workspace")
+
+            task = self.client.post(
+                "/local-api/tasks/submit",
+                headers=headers,
+                json={"command": "pwd"},
+            )
+            self.assertEqual(task.status_code, 200, task.text)
+            self.assertEqual(task.json()["id"], "task-1")
+
+            logs = self.client.get("/local-api/tasks/task-1/logs", headers=headers)
+            self.assertEqual(logs.status_code, 200, logs.text)
+            self.assertEqual(logs.json()["stdout_tail"], "ok")
+
+            wg_down = self.client.post("/local-api/wireguard/down", headers=headers)
+            self.assertEqual(wg_down.status_code, 200, wg_down.text)
+            self.assertEqual(wg_down.json()["status"], "down")
+
+    def test_stage5_assistant_route_is_wired(self) -> None:
+        headers = self._window_headers()
+        with patch(
+            "buyer_client_app.main.execute_assistant_request",
+            return_value={"ok": True, "assistant_message": "buyer stage5 ok"},
+        ) as assistant:
+            response = self.client.post(
+                "/local-api/assistant/message",
+                headers=headers,
+                json={"message": "使用当前 grant 建立会话并执行 `pwd`"},
+            )
+
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual(response.json()["assistant_message"], "buyer stage5 ok")
+        assistant.assert_called_once()
 
 
 if __name__ == "__main__":

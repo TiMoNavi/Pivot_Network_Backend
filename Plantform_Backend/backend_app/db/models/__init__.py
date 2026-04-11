@@ -16,6 +16,7 @@ from backend_app.db.models.auth_trade import (
     AuthSessionModel,
     OfferModel,
     OrderModel,
+    RuntimeSessionModel,
     SellerCapabilityAssessmentModel,
     UserModel,
 )
@@ -25,6 +26,7 @@ __all__ = [
     "AuthSessionModel",
     "OfferModel",
     "OrderModel",
+    "RuntimeSessionModel",
     "SellerCapabilityAssessmentModel",
     "SellerOnboardingAuthoritativeEffectiveTargetModel",
     "SellerOnboardingContainerRuntimeProbeModel",

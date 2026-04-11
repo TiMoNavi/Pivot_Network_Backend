@@ -6,6 +6,8 @@ import shutil
 import subprocess
 import time
 from typing import Any
+from urllib import error as urllib_error
+from urllib import request as urllib_request
 
 from app.config import Settings
 from app.drivers.command import CommandExecutionError
@@ -339,6 +341,7 @@ class SwarmRuntimeService:
                 },
                 constraints=[f"node.id=={target.node_id}"],
                 networks=[names["network_name"]],
+                restart_condition="any",
             )
 
             gateway_port = self._allocate_gateway_published_port()
@@ -752,9 +755,17 @@ class SwarmRuntimeService:
         if wireguard_metadata is None:
             wireguard_metadata = self._wireguard_metadata(status="pending_implementation")
 
+        gateway_health_ok = self._gateway_health_ok(gateway_service)
+
         return RuntimeBundleResponse(
             session_id=session_id,
-            status=self._bundle_runtime_status(status, runtime_summary, gateway_summary, recent_errors),
+            status=self._bundle_runtime_status(
+                status,
+                runtime_summary,
+                gateway_summary,
+                recent_errors,
+                gateway_health_ok=gateway_health_ok,
+            ),
             runtime_service_name=runtime_summary["service_name"] if runtime_summary else None,
             gateway_service_name=gateway_summary["service_name"] if gateway_summary else None,
             network_name=network_name,
@@ -777,24 +788,52 @@ class SwarmRuntimeService:
         runtime_summary: dict[str, Any] | None,
         gateway_summary: dict[str, Any] | None,
         recent_errors: list[str],
+        *,
+        gateway_health_ok: bool,
     ) -> str:
         if requested_status == "removed":
             return "removed"
-        if recent_errors:
-            return "failed"
 
         task_states: list[str] = []
         for summary in (runtime_summary, gateway_summary):
             if not summary:
                 continue
             for task in summary["tasks"]:
+                desired_state = str(task.get("desired_state") or "").lower()
+                if desired_state and desired_state != "running":
+                    continue
                 task_states.append(str(task.get("current_state") or "").lower())
 
         if task_states and all("running" in state for state in task_states):
-            return "running"
+            if gateway_health_ok:
+                return "running"
+            return "provisioning"
+        if recent_errors:
+            return "failed"
         if runtime_summary or gateway_summary:
             return "provisioning"
         return requested_status
+
+    @staticmethod
+    def _gateway_health_ok(gateway_service: dict[str, Any] | None) -> bool:
+        if gateway_service is None:
+            return False
+
+        published_port = None
+        for port in gateway_service.get("Endpoint", {}).get("Ports") or []:
+            published = port.get("PublishedPort")
+            if published:
+                published_port = int(published)
+                break
+        if published_port is None:
+            return False
+
+        health_url = f"http://127.0.0.1:{published_port}/health"
+        try:
+            with urllib_request.urlopen(health_url, timeout=2) as response:  # noqa: S310
+                return 200 <= response.status < 300
+        except (urllib_error.URLError, TimeoutError, ValueError):
+            return False
 
     def _cleanup_partial_bundle(self, names: dict[str, str]) -> None:
         for service_name in (names["gateway_service_name"], names["runtime_service_name"]):
