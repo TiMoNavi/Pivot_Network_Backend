@@ -1,1 +1,693 @@
-error: Web port 8848 is unavailable on 0.0.0.0:8848. Another process is already using that port. Stop the existing process, or restart CCCC on a different port. Example: `cccc --port 9000` or `CCCC_WEB_PORT=9000 cccc`.
+INFO:     Started server process [1305197]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8848 (Press CTRL+C to quit)
+INFO:     127.0.0.1:54568 - "GET /api/v1/health HTTP/1.1" 200 OK
+[cccc] Starting web server...
+[cccc]   Local:   http://localhost:8848
+[cccc]   Network: http://10.2.0.3:8848
+INFO:     127.0.0.1:54576 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17690 - "GET /api/v1/groups/g_b8581efba68e/headless/snapshot HTTP/1.1" 404 Not Found
+INFO:     202.113.184.2:6426 - "GET /api/v1/groups/g_b8581efba68e/headless/stream?replay=0 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54580 - "HEAD /ui/ HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6423 - "GET /api/v1/events/stream HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17691 - "GET /api/v1/groups/g_b8581efba68e/actors HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6426 - "GET /api/v1/groups HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6428 - "GET /api/v1/groups/g_30b9ee324451/settings HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6426 - "GET /api/v1/groups/g_30b9ee324451 HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17692 - "GET /api/v1/groups/g_30b9ee324451/context HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6428 - "GET /api/v1/groups/g_30b9ee324451/headless/snapshot HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6426 - "GET /api/v1/groups/g_30b9ee324451/ledger/stream HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17692 - "GET /api/v1/groups/g_30b9ee324451/headless/stream?replay=0 HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17693 - "GET /api/v1/groups/g_30b9ee324451/actors HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17693 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17691 - "GET /api/v1/groups/g_30b9ee324451/ledger/tail?kind=chat&limit=60 HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17691 - "POST /api/v1/groups/g_30b9ee324451/ledger/statuses HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17693 - "GET /api/v1/groups/g_30b9ee324451/pet-context HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17691 - "GET /api/v1/groups/g_30b9ee324451/presentation HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17691 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7239 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7239 - "GET /ui/ HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:7239 - "GET /ui/assets/index-CcQAExt8.js HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:7239 - "GET /ui/assets/react-vendor-CnCfD5km.js HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:3297 - "GET /ui/assets/vendor-CE0nQf9r.js HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:7242 - "GET /ui/assets/dnd-fMRKUGOQ.js HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:7244 - "GET /ui/assets/i18n-DIS4f0pN.js HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:3298 - "GET /ui/assets/index-DakqSXLS.css HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:7243 - "GET /ui/assets/floating-ui-BqSvTB2R.js HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:7243 - "GET /api/v1/branding HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3298 - "GET /ui/logo.svg HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:7243 - "GET /api/v1/groups HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7243 - "GET /ui/assets/PresentationRail-Bd6xbjO2.js HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:3298 - "GET /ui/assets/WebPet-gY3L1J3-.js HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:7244 - "GET /ui/assets/diagnostics-DXrwgCE3.js HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:7242 - "GET /ui/assets/AppModals-_alXtVfe.js HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:3297 - "GET /ui/assets/useModalA11y-COZrz2CH.js HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:7243 - "GET /ui/assets/markdown-CqX4dXRs.js HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:7239 - "GET /ui/assets/MarkdownRenderer-BsVqwuFk.js HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:3298 - "GET /ui/logo.svg HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:3298 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7242 - "GET /api/v1/groups/g_30b9ee324451/actors HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7244 - "GET /api/v1/groups/g_30b9ee324451/settings HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7239 - "GET /api/v1/ping HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7243 - "GET /api/v1/groups/g_30b9ee324451 HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3298 - "GET /api/v1/groups/g_30b9ee324451/context HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7244 - "GET /api/v1/groups/g_30b9ee324451/headless/snapshot HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7239 - "GET /api/v1/events/stream HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7243 - "GET /api/v1/groups/g_30b9ee324451/ledger/stream HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7242 - "GET /ui/logos/codex.png HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:7244 - "GET /ui/assets/xterm-9CEnUXvW.css HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:3298 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7242 - "GET /ui/assets/AgentTab-C72awSaf.js HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:7242 - "GET /ui/assets/xterm-cns3_4bn.js HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:7244 - "GET /api/v1/groups/g_30b9ee324451/headless/stream?replay=0 HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3298 - "GET /api/v1/groups HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3297 - "GET /api/v1/groups/g_30b9ee324451/ledger/tail?kind=chat&limit=60 HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7242 - "GET /api/v1/groups/g_30b9ee324451/actors HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3297 - "POST /api/v1/groups/g_30b9ee324451/ledger/statuses HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3297 - "GET /api/v1/groups/g_30b9ee324451/presentation HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3297 - "GET /api/v1/groups/g_30b9ee324451/pet-context HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3297 - "GET /api/v1/observability HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3297 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3297 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3297 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3297 - "POST /api/v1/groups/g_30b9ee324451/actors/lead/start HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3297 - "GET /api/v1/groups/g_30b9ee324451/actors HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17687 - "GET /api/v1/groups HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3297 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17688 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/lead/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:3297 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=lead&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3297 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7898 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/platform/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:17717 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=platform&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17723 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/buyer/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:7905 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=buyer&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7914 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/reviewer/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:2314 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=reviewer&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2326 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/scribe/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:2327 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=scribe&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5649 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/tester/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:2327 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=tester&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2434 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/runtime/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:2435 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=runtime&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2435 - "GET /api/v1/groups/g_30b9ee324451/context HTTP/1.1" 200 OK
+INFO:     202.113.184.2:12809 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5780 - "GET /ui/logos/codex.png HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:3085 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2565 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3688 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6112 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     202.113.184.2:7672 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17456 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17456 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7673 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/lead/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:17456 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=lead&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:14378 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7699 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4583 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7823 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2622 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7842 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7842 - "POST /api/v1/groups/g_30b9ee324451/reply HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8117 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     202.113.184.2:5978 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5978 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5978 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4171 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/lead/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:5985 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/platform/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:5986 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/runtime/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:4172 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/reviewer/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:4175 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/tester/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:5978 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=lead&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4185 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=runtime&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4183 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=platform&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5978 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=reviewer&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4199 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=tester&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5702 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7645 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7645 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:14351 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:12970 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2855 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2855 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:9761 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:9761 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5520 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5520 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6423 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6440 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6440 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2294 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17704 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5635 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5635 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7700 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5821 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7812 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7962 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2395 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7501 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4061 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6768 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8176 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8176 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4763 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6294 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4683 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6584 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7391 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7391 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7391 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6357 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6357 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6380 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4912 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4920 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8230 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4136 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:19019 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17777 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2553 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2553 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7441 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7454 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17452 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:12980 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:14398 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17639 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3334 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3334 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5624 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17488 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17502 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:12907 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7292 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7292 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7922 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7922 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7922 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2481 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4373 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8034 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3090 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3125 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2563 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2563 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2563 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8079 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6724 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8170 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6833 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6290 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6290 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6051 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5964 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3049 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4701 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4701 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5739 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6566 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4915 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4922 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6366 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6366 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4109 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4115 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4124 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7022 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     35.203.210.165:50319 - "GET / HTTP/1.0" 200 OK
+INFO:     35.203.210.165:62574 - "GET / HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17419 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17419 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:14347 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     202.113.184.2:8102 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8102 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8102 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3820 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/reviewer/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:8106 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/platform/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:3821 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/lead/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:3823 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/tester/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:3824 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/runtime/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:8102 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=reviewer&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8107 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=platform&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8110 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=lead&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8102 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=tester&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8107 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=runtime&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:9796 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5464 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5998 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5918 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4877 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4877 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4877 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4877 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5948 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5720 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4527 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6580 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4312 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7377 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7414 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6338 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6633 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2555 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:14336 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:14349 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:14349 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7013 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7022 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5037 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7126 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17529 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7162 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5599 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5614 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2332 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7565 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7565 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     202.113.184.2:7874 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7874 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     202.113.184.2:7874 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7880 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/scribe/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:7881 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/reviewer/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:7882 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/tester/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:7883 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/lead/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:7885 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/buyer/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:7874 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=scribe&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7884 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=reviewer&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7886 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=tester&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7874 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=lead&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7874 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7884 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=buyer&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7884 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5677 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4631 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2783 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7991 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3713 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6102 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     202.113.184.2:7863 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7863 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7863 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2398 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/reviewer/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:2400 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/tester/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:2401 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/buyer/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:2402 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/lead/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:7948 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/platform/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:7863 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=reviewer&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2403 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=buyer&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7947 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=tester&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7978 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7863 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=lead&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2403 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=platform&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4335 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17749 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8228 - "GET /ui/assets/SettingsModal-Dr0taW57.js HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8228 - "GET /ui/assets/GuidanceTab-Ah-UfS-l.js HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8228 - "GET /api/v1/groups/g_30b9ee324451/prompts HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8229 - "GET /api/im/status?group_id=g_30b9ee324451 HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8228 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8230 - "GET /api/v1/groups/g_30b9ee324451/actors HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8230 - "GET /api/im/config?group_id=g_30b9ee324451 HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8228 - "GET /api/v1/observability HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8228 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7454 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7211 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7211 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3996 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2607 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     35.203.210.14:64032 - "GET /ui/ HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5974 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5974 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4311 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7638 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7638 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7638 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7638 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7638 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7638 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7638 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7638 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7638 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7638 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7638 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2331 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7807 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7807 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7807 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4563 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2617 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3732 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6667 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4109 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3369 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7484 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17684 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17724 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5610 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2993 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3999 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4625 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3662 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3662 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2396 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7829 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7870 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3728 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3752 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5868 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5868 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5868 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5868 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5868 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5868 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5868 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5868 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7502 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4808 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5210 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8095 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3635 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7079 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5078 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5102 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6285 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6948 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6962 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17583 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2542 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7388 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3357 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3307 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5251 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5594 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5630 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:12872 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7750 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4026 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6454 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5332 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5645 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8058 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5764 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5764 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7866 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7866 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7988 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:9838 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:9838 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:9838 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6307 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6583 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6583 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17428 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8196 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8196 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8196 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8196 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8196 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8196 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8196 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8196 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8196 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4261 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7198 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3323 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2273 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2291 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6408 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4554 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4554 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     202.113.184.2:3058 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6825 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6825 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4161 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/reviewer/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:6833 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/tester/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:6834 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/runtime/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:6835 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/buyer/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:6836 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/platform/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:6837 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/lead/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:6825 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=reviewer&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3058 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=tester&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4163 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=runtime&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6825 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=buyer&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6565 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6565 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:14392 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:14392 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:14392 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5575 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5631 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4669 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+WARNING:  Invalid HTTP request received.
+INFO:     66.132.172.107:34688 - "GET / HTTP/1.1" 200 OK
+WARNING:  Invalid HTTP request received.
+INFO:     66.132.172.107:41088 - "GET /favicon.ico HTTP/1.1" 200 OK
+WARNING:  Invalid HTTP request received.
+INFO:     66.132.172.107:5300 - "GET /sitemap.xml HTTP/1.1" 404 Not Found
+INFO:     202.113.184.2:7400 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7400 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7400 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7409 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/reviewer/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:5071 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/runtime/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:5072 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/lead/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:5073 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/buyer/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:7410 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/tester/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:7400 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=reviewer&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5074 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=runtime&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5075 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=lead&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7400 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=buyer&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5074 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=tester&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3848 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5319 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7895 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6098 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2789 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3721 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4810 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7036 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:14385 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5526 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17714 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5686 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5687 - "GET /api/im/status?group_id=g_30b9ee324451 HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2339 - "GET /api/v1/groups/g_30b9ee324451/prompts HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2339 - "GET /api/im/config?group_id=g_30b9ee324451 HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5686 - "GET /api/v1/groups/g_30b9ee324451/actors HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5687 - "GET /api/v1/observability HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5687 - "GET /ui/assets/AutomationTab-DnO0vBTc.js HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5687 - "GET /api/v1/groups/g_30b9ee324451/automation HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2441 - "GET /ui/assets/CapabilitiesTab-BjtyVdpT.js HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2441 - "GET /api/v1/capabilities/overview?limit=1200&include_indexed=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2442 - "GET /api/v1/capabilities/allowlist?by=user HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8047 - "GET /ui/assets/ActorProfilesTab-g4lX215B.js HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8047 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8047 - "GET /api/v1/profiles?view=global HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8047 - "GET /ui/assets/BrandingTab-BMd_QeL4.js HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8047 - "GET /api/v1/branding HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4367 - "GET /ui/logo.svg HTTP/1.1" 304 Not Modified
+INFO:     202.113.184.2:4367 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4367 - "GET /api/v1/profiles?view=global HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4367 - "GET /api/v1/capabilities/overview?limit=1200&include_indexed=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7513 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8187 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6707 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7611 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:9823 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7780 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2575 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4066 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8088 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6044 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6697 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     202.113.184.2:7075 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3580 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7085 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/runtime/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:3580 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=runtime&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5114 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3267 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     connection closed
+WARNING:  Invalid HTTP request received.
+INFO:     202.113.184.2:7049 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7049 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7049 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7055 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/reviewer/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:7056 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/lead/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:7049 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=reviewer&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7057 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=lead&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4170 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4722 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2858 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7140 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5298 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3881 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     202.113.184.2:4227 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8235 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/reviewer/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:8236 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/runtime/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:4234 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/tester/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:4227 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=reviewer&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4236 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=runtime&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4237 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=tester&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5374 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2319 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3135 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5679 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:9855 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:9855 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3595 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17600 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7217 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2343 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8126 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7371 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7444 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+WARNING:  Invalid HTTP request received.
+INFO:     202.113.184.2:4630 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6447 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7270 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7920 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:9821 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2613 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:17579 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6574 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6352 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2309 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     35.203.210.177:60516 - "GET / HTTP/1.1" 200 OK
+INFO:     120.24.5.6:36038 - "POST /nacos/v1/auth/login HTTP/1.1" 404 Not Found
+INFO:     162.216.149.168:63688 - "GET /ui/ HTTP/1.1" 200 OK
+WARNING:  Invalid HTTP request received.
+INFO:     66.132.172.128:38266 - "GET / HTTP/1.1" 200 OK
+WARNING:  Invalid HTTP request received.
+INFO:     66.132.172.128:50064 - "GET /favicon.ico HTTP/1.1" 200 OK
+WARNING:  Invalid HTTP request received.
+INFO:     66.132.172.128:32090 - "GET /security.txt HTTP/1.1" 404 Not Found
+INFO:     202.113.184.2:9754 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5931 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7233 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     202.113.184.2:6573 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6573 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6573 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2288 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/reviewer/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:6573 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=reviewer&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2964 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     202.113.184.2:5277 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5277 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5277 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3747 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/lead/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:5277 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=lead&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     202.113.184.2:2477 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6548 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/lead/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:2477 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=lead&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7409 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3673 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7440 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7124 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:3834 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7580 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:6430 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4717 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4539 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7379 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2380 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:8237 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:2233 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:7455 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5646 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5693 - "POST /api/v1/groups/g_30b9ee324451/send HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4487 - "GET /api/v1/groups/g_30b9ee324451/actors?include_unread=true HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4487 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:4535 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5770 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     202.113.184.2:9814 - "GET /api/v1/web_access/session HTTP/1.1" 200 OK
+INFO:     202.113.184.2:5299 - "WebSocket /api/v1/groups/g_30b9ee324451/actors/lead/term" [accepted]
+INFO:     connection open
+INFO:     202.113.184.2:9814 - "GET /api/v1/groups/g_30b9ee324451/terminal/tail?actor_id=lead&max_chars=4000&strip_ansi=true&compact=true HTTP/1.1" 200 OK
